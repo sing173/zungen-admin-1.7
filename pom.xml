@@ -16,13 +16,14 @@
         <module>yudao-module-member</module>
         <module>yudao-module-system</module>
         <module>yudao-module-infra</module>
-        <module>yudao-module-pay</module>
-<!--        <module>yudao-module-bpm</module>-->
-<!--        <module>yudao-module-report</module>-->
+<!--        <module>yudao-module-pay</module>-->
+        <module>yudao-module-bpm</module>
+        <module>yudao-module-report</module>
 <!--        <module>yudao-module-mp</module>-->
 <!--        <module>yudao-module-mall</module>-->
         <!-- 示例项目 -->
-        <module>yudao-example</module>
+<!--        <module>yudao-example</module>-->
+        <module>yudao-module-crm</module>
     </modules>
 
     <name>${project.artifactId}</name>
@@ -30,7 +31,7 @@
     <url>https://github.com/YunaiV/ruoyi-vue-pro</url>
 
     <properties>
-        <revision>1.7.1-snapshot</revision>
+        <revision>1.7.1-SNAPSHOT</revision>
         <!-- Maven 相关 -->
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -94,6 +95,12 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+            </plugin>
+        </plugins>
     </build>
 
     <!-- 使用 aliyun 的 Maven 源，提升下载速度 -->

@@ -61,4 +61,7 @@ public interface ErrorCodeConstants {
     ErrorCode USER_GROUP_NOT_EXISTS = new ErrorCode(1009011000, "用户组不存在");
     ErrorCode USER_GROUP_IS_DISABLE = new ErrorCode(1009011001, "名字为【{}】的用户组已被禁用");
 
+    // ========== 贷款组模块 1-009-012-000 ==========
+    ErrorCode LOAN_USER_NOT_EXISTS = new ErrorCode(1009012000, "贷款人不存在");
+    ErrorCode LOAN_IDENTITY_NOT_EXISTS = new ErrorCode(1009012001, "贷款/担保人-身份要素认证不存在");
 }

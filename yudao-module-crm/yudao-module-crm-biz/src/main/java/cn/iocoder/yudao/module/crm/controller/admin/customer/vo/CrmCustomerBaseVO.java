@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.crm.controller.admin.customer.vo;
 
+import cn.iocoder.yudao.framework.common.validation.Mobile;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
@@ -21,10 +22,10 @@ public class CrmCustomerBaseVO {
 
     @Schema(description = "手机号码", required = true)
     @NotNull(message = "手机号码不能为空")
+    @Mobile
     private String mobile;
 
     @Schema(description = "身份编号")
-    @NotNull(message = "身份编号不能为空")
     private String idCard;
 
 }

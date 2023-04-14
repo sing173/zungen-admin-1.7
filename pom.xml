@@ -24,6 +24,7 @@
         <!-- 示例项目 -->
 <!--        <module>yudao-example</module>-->
         <module>yudao-module-crm</module>
+        <module>zungen-module-mqtt</module>
     </modules>
 
     <name>${project.artifactId}</name>

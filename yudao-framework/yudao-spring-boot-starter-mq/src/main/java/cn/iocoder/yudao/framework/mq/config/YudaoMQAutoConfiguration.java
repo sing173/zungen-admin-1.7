@@ -136,7 +136,7 @@ public class YudaoMQAutoConfiguration {
 
     /**
      * 构建消费者名字，使用本地 IP + 进程编号的方式。
-     * 参考自 RocketMQ clientId 的实现
+     * 参考自 roRocketMQ clientId 的实现
      *
      * @return 消费者名字
      */

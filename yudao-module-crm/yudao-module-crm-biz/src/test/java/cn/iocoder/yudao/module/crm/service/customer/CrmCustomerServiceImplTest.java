@@ -111,7 +111,6 @@ public class CrmCustomerServiceImplTest extends BaseDbUnitTest {
        // mock 数据
        CrmCustomerDO dbCustomer = randomPojo(CrmCustomerDO.class, o -> { // 等会查询到
            o.setUserId(null);
-           o.setIdentityId(null);
            o.setName(null);
            o.setMobile(null);
            o.setIdCard(null);
@@ -120,8 +119,6 @@ public class CrmCustomerServiceImplTest extends BaseDbUnitTest {
        customerMapper.insert(dbCustomer);
        // 测试 userId 不匹配
        customerMapper.insert(cloneIgnoreId(dbCustomer, o -> o.setUserId(null)));
-       // 测试 identityId 不匹配
-       customerMapper.insert(cloneIgnoreId(dbCustomer, o -> o.setIdentityId(null)));
        // 测试 name 不匹配
        customerMapper.insert(cloneIgnoreId(dbCustomer, o -> o.setName(null)));
        // 测试 mobile 不匹配
@@ -153,7 +150,6 @@ public class CrmCustomerServiceImplTest extends BaseDbUnitTest {
        // mock 数据
        CrmCustomerDO dbCustomer = randomPojo(CrmCustomerDO.class, o -> { // 等会查询到
            o.setUserId(null);
-           o.setIdentityId(null);
            o.setName(null);
            o.setMobile(null);
            o.setIdCard(null);
@@ -162,8 +158,6 @@ public class CrmCustomerServiceImplTest extends BaseDbUnitTest {
        customerMapper.insert(dbCustomer);
        // 测试 userId 不匹配
        customerMapper.insert(cloneIgnoreId(dbCustomer, o -> o.setUserId(null)));
-       // 测试 identityId 不匹配
-       customerMapper.insert(cloneIgnoreId(dbCustomer, o -> o.setIdentityId(null)));
        // 测试 name 不匹配
        customerMapper.insert(cloneIgnoreId(dbCustomer, o -> o.setName(null)));
        // 测试 mobile 不匹配

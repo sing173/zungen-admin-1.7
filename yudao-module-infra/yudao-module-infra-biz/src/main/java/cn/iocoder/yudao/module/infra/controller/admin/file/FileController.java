@@ -43,9 +43,8 @@ public class FileController {
     @PostMapping("/upload")
     @Operation(summary = "上传文件")
     @OperateLog(logArgs = false) // 上传文件，没有记录操作日志的必要
-    public CommonResult<String> uploadFile(FileUploadReqVO uploadReqVO) throws Exception {
-        MultipartFile file = uploadReqVO.getFile();
-        String path = uploadReqVO.getPath();
+    public CommonResult<String> uploadFile(@RequestParam("file") MultipartFile file,
+                                           @RequestParam(value = "path",required = false) String path) throws Exception {
         return success(fileService.createFile(file.getOriginalFilename(), path, IoUtil.readBytes(file.getInputStream())));
     }
 

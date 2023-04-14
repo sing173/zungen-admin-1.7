@@ -13,11 +13,8 @@ public class CrmCustomerRespVO extends CrmCustomerBaseVO {
     @Schema(description = "主键", required = true, example = "8279")
     private Long id;
 
-    @Schema(description = "客户的用户编号", example = "2170")
-    private Long userId;
-
-    @Schema(description = "担保人的身份认证id", example = "13023")
-    private Long identityId;
+    @Schema(description = "家庭地址")
+    private String address;
 
     @Schema(description = "创建时间", required = true)
     private LocalDateTime createTime;

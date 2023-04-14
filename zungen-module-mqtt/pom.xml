@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>yudao</artifactId>
+        <groupId>cn.iocoder.boot</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>zungen-module-mqtt</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>zungen-module-mqtt-api</module>
+        <module>zungen-module-mqtt-biz</module>
+    </modules>
+
+    <name>${project.artifactId}</name>
+    <description>
+        mqtt服务器模块，通过mqtt连接所有设备并桥接到服务端的队列中，
+        由各服务根据业务需求处理
+    </description>
+</project>

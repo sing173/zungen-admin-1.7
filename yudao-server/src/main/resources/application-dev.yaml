@@ -44,24 +44,26 @@ spring:
       primary: master
       datasource:
         master:
-          name: zungen-admin-dev-1.7.1
-          url: jdbc:mysql://192.168.1.172:3306/${spring.datasource.dynamic.datasource.master.name}?useSSL=false&allowPublicKeyRetrieval=true
+#          name: zungen-admin-dev-1.7.1
+          name: zungen_admin
+          url: jdbc:mysql://192.168.124.6:3306/${spring.datasource.dynamic.datasource.master.name}?useSSL=false&allowPublicKeyRetrieval=true
           driver-class-name: com.mysql.jdbc.Driver
           username: root
-          password: Zungen@123#@!
+#          password: Zungen@123#@!
+          password: a123456
         slave: # 模拟从库，可根据自己需要修改 # 模拟从库，可根据自己需要修改
-          name: zungen-admin-dev-1.7.1
-          url: jdbc:mysql://192.168.1.172:3306/${spring.datasource.dynamic.datasource.slave.name}?useSSL=false&allowPublicKeyRetrieval=true
+          name: zungen_admin
+          url: jdbc:mysql://192.168.124.6:3306/${spring.datasource.dynamic.datasource.slave.name}?useSSL=false&allowPublicKeyRetrieval=true
           driver-class-name: com.mysql.jdbc.Driver
           username: root
-          password: Zungen@123#@!
+          password: a123456
 
   # Redis 配置。Redisson 默认的配置足够使用，一般不需要进行调优
   redis:
-    host: 192.168.1.172 # 地址
+    host: 127.0.0.1 # 地址
     port: 6379 # 端口
     database: 1 # 数据库索引
-    password: 123456 # 密码，建议生产环境开启
+#    password: 123456 # 密码，建议生产环境开启
 
 --- #################### 定时任务相关配置 ####################
 
@@ -195,3 +197,16 @@ wx:
       host: 127.0.0.1
       port: 6379
       password:
+
+# MQTT server parameters
+mqtt:
+  # Enable/disable mqtt transport protocol.
+  enabled: true
+  bind_address: 0.0.0.0
+  bind_port: 48083
+  timeout: 10000
+  netty:
+    leak_detector_level: DISABLED
+    boss_group_thread_count: 1
+    worker_group_thread_count: 8
+    max_payload_size: 65536

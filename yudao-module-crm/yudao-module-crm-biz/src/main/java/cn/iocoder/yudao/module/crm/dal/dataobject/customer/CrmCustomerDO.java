@@ -32,14 +32,7 @@ public class CrmCustomerDO extends BaseDO {
      * 客户的用户编号
      */
     private Long userId;
-    /**
-     * 担保人的身份认证id
-     */
-    private Long identityId;
-    /**
-     * 担保人的联系人id
-     */
-    private Long contactId;
+
     /**
      * 姓名
      */

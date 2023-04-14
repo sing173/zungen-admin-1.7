@@ -20,7 +20,6 @@ public interface CrmCustomerMapper extends BaseMapperX<CrmCustomerDO> {
     default PageResult<CrmCustomerDO> selectPage(CrmCustomerPageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<CrmCustomerDO>()
                 .eqIfPresent(CrmCustomerDO::getUserId, reqVO.getUserId())
-                .eqIfPresent(CrmCustomerDO::getIdentityId, reqVO.getIdentityId())
                 .likeIfPresent(CrmCustomerDO::getName, reqVO.getName())
                 .eqIfPresent(CrmCustomerDO::getMobile, reqVO.getMobile())
                 .eqIfPresent(CrmCustomerDO::getIdCard, reqVO.getIdCard())
@@ -31,7 +30,6 @@ public interface CrmCustomerMapper extends BaseMapperX<CrmCustomerDO> {
     default List<CrmCustomerDO> selectList(CrmCustomerExportReqVO reqVO) {
         return selectList(new LambdaQueryWrapperX<CrmCustomerDO>()
                 .eqIfPresent(CrmCustomerDO::getUserId, reqVO.getUserId())
-                .eqIfPresent(CrmCustomerDO::getIdentityId, reqVO.getIdentityId())
                 .likeIfPresent(CrmCustomerDO::getName, reqVO.getName())
                 .eqIfPresent(CrmCustomerDO::getMobile, reqVO.getMobile())
                 .eqIfPresent(CrmCustomerDO::getIdCard, reqVO.getIdCard())

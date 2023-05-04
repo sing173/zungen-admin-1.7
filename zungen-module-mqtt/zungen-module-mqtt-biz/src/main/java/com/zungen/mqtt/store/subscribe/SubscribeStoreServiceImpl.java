@@ -19,14 +19,14 @@ public class SubscribeStoreServiceImpl implements SubscribeStoreService {
     private SubscribeWildcardCache subscribeWildcardCache;
 
     @Autowired
-    private SubscribeNotWildcardCache grozaSubscribeNotWildcardCache;
+    private SubscribeNotWildcardCache subscribeNotWildcardCache;
 
     @Override
     public void put(String topicFilter, SubscribeStore subscribeStore) {
         if (StrUtil.contains(topicFilter,'#') || StrUtil.contains(topicFilter,'+')){
             subscribeWildcardCache.put(topicFilter,subscribeStore.getClientId(),subscribeStore);
         }else{
-            grozaSubscribeNotWildcardCache.put(topicFilter,subscribeStore.getClientId(),subscribeStore);
+            subscribeNotWildcardCache.put(topicFilter,subscribeStore.getClientId(),subscribeStore);
         }
     }
 
@@ -35,20 +35,20 @@ public class SubscribeStoreServiceImpl implements SubscribeStoreService {
         if (StrUtil.contains(topicFilter,'#') || StrUtil.contains(topicFilter,'+')){
             subscribeWildcardCache.remove(topicFilter,clientId);
         }else {
-            grozaSubscribeNotWildcardCache.remove(topicFilter,clientId);
+            subscribeNotWildcardCache.remove(topicFilter,clientId);
         }
     }
 
     @Override
     public void removeForClient(String clientId) {
-        grozaSubscribeNotWildcardCache.removeForClient(clientId);
+        subscribeNotWildcardCache.removeForClient(clientId);
         subscribeWildcardCache.removeForClient(clientId);
     }
 
     @Override
     public List<SubscribeStore> search(String topic) {
         List<SubscribeStore> subscribeStores = new ArrayList<SubscribeStore>();
-        List<SubscribeStore> list = grozaSubscribeNotWildcardCache.all(topic);
+        List<SubscribeStore> list = subscribeNotWildcardCache.all(topic);
         if (list.size() > 0) {
             subscribeStores.addAll(list);
         }

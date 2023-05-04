@@ -1,7 +1,10 @@
 package com.zungen.mqtt.store.subscribe;
 
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
+@NoArgsConstructor
 public class SubscribeStore implements Serializable {
     private static final long serialVersionUID = 1276156087085594264L;
 

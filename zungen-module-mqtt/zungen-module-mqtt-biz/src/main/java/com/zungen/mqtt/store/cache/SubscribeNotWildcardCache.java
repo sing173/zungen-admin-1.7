@@ -26,6 +26,9 @@ public class SubscribeNotWildcardCache {
         stringRedisTemplate.opsForSet().add(CACHE_CLIENT_PRE + clientId,topic);
         return subscribeStore;
     }
+
+
+
     public SubscribeStore get(String topic,String clientId){
         return (SubscribeStore) redisCacheTemplate.opsForHash().get(CACHE_PRE + topic,clientId);
     }

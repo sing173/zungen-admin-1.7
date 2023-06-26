@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
 * @author admin
 */
 @Import(CrmCustomerServiceImpl.class)
-public class CrmCustomerServiceImplTest extends BaseDbUnitTest {
+public class CrmCustomerApiImplServiceImplTest extends BaseDbUnitTest {
 
     @Resource
     private CrmCustomerServiceImpl customerService;

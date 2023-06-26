@@ -76,7 +76,6 @@ public class MqttServer {
                         pipeline.addLast(new MqttMessageWebSocketFrameEncoder());
                         pipeline.addLast(MqttEncoder.INSTANCE);
                         pipeline.addLast(new MqttDecoder(maxPayloadSize));
-
                         MqttTransportHandler handler = new MqttTransportHandler(protocolProcess);
                         pipeline.addLast(handler);
                     }

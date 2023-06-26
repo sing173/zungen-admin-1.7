@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum BpmTaskRuleScriptEnum {
+    ASSIGN_USER(1L, "动态指派人"),
 
     START_USER(10L, "流程发起人"),
 

@@ -52,6 +52,7 @@ public interface ErrorCodeConstants {
     ErrorCode TASK_UPDATE_FAIL_NOT_MODEL = new ErrorCode(1009006002, "只有流程模型的任务分配规则，才允许被修改");
     ErrorCode TASK_CREATE_FAIL_NO_CANDIDATE_USER = new ErrorCode(1009006003, "操作失败，原因：找不到任务的审批人！");
     ErrorCode TASK_ASSIGN_SCRIPT_NOT_EXISTS = new ErrorCode(1009006004, "操作失败，原因：任务分配脚本({}) 不存在");
+    ErrorCode TASK_ASSIGN_USER_NOT_EXISTS = new ErrorCode(1009006005, "操作失败，原因：未指定下一个任务的审批人");
 
     // ========== 动态表单模块 1-009-010-000 ==========
     ErrorCode FORM_NOT_EXISTS = new ErrorCode(1009010000, "动态表单不存在");
@@ -61,7 +62,6 @@ public interface ErrorCodeConstants {
     ErrorCode USER_GROUP_NOT_EXISTS = new ErrorCode(1009011000, "用户组不存在");
     ErrorCode USER_GROUP_IS_DISABLE = new ErrorCode(1009011001, "名字为【{}】的用户组已被禁用");
 
-    // ========== 贷款组模块 1-009-012-000 ==========
-    ErrorCode LOAN_USER_NOT_EXISTS = new ErrorCode(1009012000, "贷款人不存在");
-    ErrorCode LOAN_IDENTITY_NOT_EXISTS = new ErrorCode(1009012001, "贷款/担保人-身份要素认证不存在");
+    // ========== 进件工单 1-009-012-000 ==========
+    ErrorCode CRM_INPUT_NOT_EXISTS = new ErrorCode(1009012000, "进件工单不存在");
 }

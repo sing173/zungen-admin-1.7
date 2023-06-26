@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.bpm.controller.admin.task.vo.instance;
 
+import cn.iocoder.yudao.module.bpm.controller.admin.task.vo.task.BpmTaskRespVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -48,6 +49,9 @@ public class BpmProcessInstanceRespVO {
      */
     private ProcessDefinition processDefinition;
 
+    @Schema(description = "审批任务列表（包括需显示的表单结构）")
+    private List<BpmTaskRespVO> tasks;
+
     @Schema(description = "用户信息")
     @Data
     public static class User {
@@ -90,5 +94,4 @@ public class BpmProcessInstanceRespVO {
         private String bpmnXml;
 
     }
-
 }

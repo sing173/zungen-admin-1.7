@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
@@ -71,10 +72,22 @@ public class CodegenController {
     @GetMapping("/detail")
     @Operation(summary = "获得表和字段的明细")
     @Parameter(name = "tableId", description = "表编号", required = true, example = "1024")
+    @Parameter(name = "simple", description = "是否简单模式，不返回系统字段")
     @PreAuthorize("@ss.hasPermission('infra:codegen:query')")
-    public CommonResult<CodegenDetailRespVO> getCodegenDetail(@RequestParam("tableId") Long tableId) {
+    public CommonResult<CodegenDetailRespVO> getCodegenDetail(@RequestParam("tableId") Long tableId,
+                                                              @RequestParam(value = "simple", required = false) Boolean simple) {
         CodegenTableDO table = codegenService.getCodegenTablePage(tableId);
         List<CodegenColumnDO> columns = codegenService.getCodegenColumnListByTableId(tableId);
+        if(simple != null && simple) {
+            columns = columns.stream().filter(codegenColumnDO -> !codegenColumnDO.getColumnName().equals("id")  &&
+                    !codegenColumnDO.getColumnName().equals("creator") &&
+                    !codegenColumnDO.getColumnName().equals("create_time") &&
+                    !codegenColumnDO.getColumnName().equals("updater") &&
+                    !codegenColumnDO.getColumnName().equals("update_time") &&
+                    !codegenColumnDO.getColumnName().equals("deleted") &&
+                    !codegenColumnDO.getColumnName().equals("tenant_id"))
+            .collect(Collectors.toList());
+        }
         // 拼装返回
         return success(CodegenConvert.INSTANCE.convert(table, columns));
     }

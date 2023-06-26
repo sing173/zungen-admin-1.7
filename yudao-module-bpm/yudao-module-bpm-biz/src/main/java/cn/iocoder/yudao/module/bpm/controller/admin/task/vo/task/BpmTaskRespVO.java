@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.List;
+
 @Schema(description = "管理后台 - 流程任务的 Response VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -32,6 +34,29 @@ public class BpmTaskRespVO extends BpmTaskDonePageItemRespVO {
         private Long deptId;
         @Schema(description = "部门名称", required = true, example = "研发部")
         private String deptName;
+
+    }
+
+    private List<Form> formList;
+
+    @Schema(description = "表单信息")
+    @Data
+    public static class Form {
+        @Schema(description = "表单配置ID")
+        private Long id;
+
+        @Schema(description = "表单名称")
+        private String name;
+
+        @Schema(description = "表单配置")
+        private String conf;
+
+        @Schema(description = "读取表单数据的id")
+        private Long dataId;
+
+        @Schema(description = "表单字段配置")
+        private List<String> fields;
+
 
     }
 }

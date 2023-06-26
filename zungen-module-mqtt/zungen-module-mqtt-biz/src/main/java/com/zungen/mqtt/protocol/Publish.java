@@ -26,7 +26,7 @@ public class Publish {
 
     private DupPublishMessageStoreService dupPublishMessageStoreService;
 
-    private void sendPublishMessage(String topic, MqttQoS mqttQoS, byte[] messageBytes, boolean retain, boolean dup) {
+    public void sendPublishMessage(String topic, MqttQoS mqttQoS, byte[] messageBytes, boolean retain, boolean dup) {
         List<SubscribeStore> subscribeStores = subscribeStoreService.search(topic);
         for (SubscribeStore subscribeStore : subscribeStores) {
             if (sessionStoreService.containsKey(subscribeStore.getClientId())) {

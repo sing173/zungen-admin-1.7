@@ -4,6 +4,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.number.NumberUtils;
 import cn.iocoder.yudao.module.bpm.controller.admin.task.vo.instance.BpmProcessInstancePageItemRespVO;
 import cn.iocoder.yudao.module.bpm.controller.admin.task.vo.instance.BpmProcessInstanceRespVO;
+import cn.iocoder.yudao.module.bpm.controller.admin.task.vo.task.BpmTaskRespVO;
 import cn.iocoder.yudao.module.bpm.dal.dataobject.definition.BpmProcessDefinitionExtDO;
 import cn.iocoder.yudao.module.bpm.dal.dataobject.task.BpmProcessInstanceExtDO;
 import cn.iocoder.yudao.module.bpm.framework.bpm.core.event.BpmProcessInstanceResultEvent;
@@ -49,7 +50,7 @@ public interface BpmProcessInstanceConvert {
 
     default BpmProcessInstanceRespVO convert2(HistoricProcessInstance processInstance, BpmProcessInstanceExtDO processInstanceExt,
                                               ProcessDefinition processDefinition, BpmProcessDefinitionExtDO processDefinitionExt,
-                                              String bpmnXml, AdminUserRespDTO startUser, DeptRespDTO dept) {
+                                              String bpmnXml, AdminUserRespDTO startUser, DeptRespDTO dept, List<BpmTaskRespVO> taskRespVOS) {
         BpmProcessInstanceRespVO respVO = convert2(processInstance);
         copyTo(processInstanceExt, respVO);
         // definition
@@ -62,6 +63,10 @@ public interface BpmProcessInstanceConvert {
             if (dept != null) {
                 respVO.getStartUser().setDeptName(dept.getName());
             }
+        }
+        // task
+        if(taskRespVOS != null) {
+            respVO.setTasks(taskRespVOS);
         }
         return respVO;
     }

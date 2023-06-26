@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.system.api.notify;
 import cn.iocoder.yudao.module.system.api.notify.dto.NotifySendSingleToUserReqDTO;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * 站内信发送 API 接口

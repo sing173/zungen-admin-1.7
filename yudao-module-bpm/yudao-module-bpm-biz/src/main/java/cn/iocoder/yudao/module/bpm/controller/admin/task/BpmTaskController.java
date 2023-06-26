@@ -3,6 +3,8 @@ package cn.iocoder.yudao.module.bpm.controller.admin.task;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.bpm.controller.admin.task.vo.task.*;
+import cn.iocoder.yudao.module.bpm.enums.ErrorCodeConstants;
+import cn.iocoder.yudao.module.bpm.mq.producer.BpmOrderProducer;
 import cn.iocoder.yudao.module.bpm.service.task.BpmTaskService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +18,7 @@ import javax.validation.Valid;
 
 import java.util.List;
 
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.error;
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 import static cn.iocoder.yudao.framework.web.core.util.WebFrameworkUtils.getLoginUserId;
 
@@ -27,6 +30,9 @@ public class BpmTaskController {
 
     @Resource
     private BpmTaskService taskService;
+
+    @Resource
+    private BpmOrderProducer bpmOrderProducer;
 
     @GetMapping("todo-page")
     @Operation(summary = "获取 Todo 待办任务分页")
@@ -75,4 +81,24 @@ public class BpmTaskController {
         return success(true);
     }
 
+    @GetMapping("/kill")
+    @Operation(summary = "抢单")
+    @PreAuthorize("@ss.hasPermission('bpm:crm-input:update')")
+    public CommonResult<Boolean> orderKill(@RequestParam("orderType")String orderType,
+                                           @RequestParam("orderId")String orderId,
+                                           @RequestParam("userId")String userId) {
+
+        Long killResult = bpmOrderProducer.killBpmOrder(orderType, orderId, userId);
+        switch (killResult.byteValue()) {
+            case 1:
+                return success(true);
+            case 0:
+            case -1:
+            case -2:
+            case -3:
+            default:
+                return error(ErrorCodeConstants.CRM_INPUT_NOT_EXISTS);
+
+        }
+    }
 }

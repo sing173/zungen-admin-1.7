@@ -4,6 +4,7 @@ import java.util.*;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 
+import cn.iocoder.yudao.module.crm.api.dto.CrmCustomerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import cn.iocoder.yudao.module.crm.controller.admin.customer.vo.*;
@@ -31,4 +32,5 @@ public interface CrmCustomerConvert {
 
     List<CrmCustomerExcelVO> convertList02(List<CrmCustomerDO> list);
 
+    CrmCustomerDTO convert2(CrmCustomerDO bean);
 }

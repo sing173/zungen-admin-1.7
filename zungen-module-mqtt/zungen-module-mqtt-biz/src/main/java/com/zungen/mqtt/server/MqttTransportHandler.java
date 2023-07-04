@@ -47,6 +47,7 @@ public class MqttTransportHandler extends SimpleChannelInboundHandler<MqttMessag
             return;
         }
 
+//        log.info("channelRead , message: {}", msg.toString());
         switch (msg.fixedHeader().messageType()) {
             case CONNECT:
                 protocolProcess.connect().processConnect(ctx.channel(), (MqttConnectMessage) msg);
@@ -57,7 +58,7 @@ public class MqttTransportHandler extends SimpleChannelInboundHandler<MqttMessag
                 protocolProcess.publish().processPublish(ctx.channel(), (MqttPublishMessage) msg);
                 break;
             case PUBACK:
-                protocolProcess.pubAck().processPubAck(ctx.channel(), (MqttMessageIdVariableHeader) msg.variableHeader());
+                protocolProcess.pubBack().processPubAck(ctx.channel(), (MqttMessageIdVariableHeader) msg.variableHeader());
                 break;
             case PUBREC:
                 protocolProcess.pubRec().processPubRec(ctx.channel(), (MqttMessageIdVariableHeader) msg.variableHeader());

@@ -9,6 +9,7 @@
         <version>${revision}</version>
     </parent>
     <packaging>pom</packaging>
+
     <modules>
         <module>yudao-common</module>
         <module>yudao-spring-boot-starter-banner</module>
@@ -56,5 +57,4 @@
         如果是业务组件，Maven 名字会包含 biz
     </description>
     <url>https://github.com/YunaiV/ruoyi-vue-pro</url>
-
 </project>

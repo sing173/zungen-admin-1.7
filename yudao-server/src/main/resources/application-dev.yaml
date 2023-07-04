@@ -208,3 +208,10 @@ mqtt:
     boss_group_thread_count: 1
     worker_group_thread_count: 8
     max_payload_size: 65536
+
+
+--- #################### RPC相关配置 ####################
+dubbo:
+  # Dubbo 注册中心配
+  registry:
+    address: zookeeper://192.168.1.172:2181 # 注册中心地址

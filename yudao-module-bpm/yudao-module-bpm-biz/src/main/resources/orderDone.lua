@@ -35,6 +35,8 @@ orderInfJson.status = 10
 orderInfJson.auditor = userId
 orderInfoStr = cjson.encode(orderInfJson)
 redis.call('set', orderSearchKey, orderInfoStr)
+-- 删除工单查询列表对应的工单 TODO 后续持久化到数据库后可删除
+--redis.call('del', orderSearchKey)
 return orderInfoStr
 
 

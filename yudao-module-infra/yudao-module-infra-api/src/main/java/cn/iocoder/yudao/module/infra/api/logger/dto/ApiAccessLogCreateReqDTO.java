@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.infra.api.logger.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
  * @author 芋道源码
  */
 @Data
-public class ApiAccessLogCreateReqDTO {
+public class ApiAccessLogCreateReqDTO implements Serializable {
 
     /**
      * 链路追踪编号

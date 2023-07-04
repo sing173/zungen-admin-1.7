@@ -8,7 +8,7 @@ import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
 import cn.iocoder.yudao.framework.mq.core.RedisMQTemplate;
 import cn.iocoder.yudao.framework.mq.core.stream.AbstractStreamMessageListener;
 import cn.iocoder.yudao.module.bpm.mq.message.BpmTakeTaskMessage;
-import cn.iocoder.yudao.module.bpm.service.crm.dto.BpmOrderPoolDTO;
+import cn.iocoder.yudao.module.bpm.mq.producer.dto.BpmOrderPoolDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.runtime.Execution;

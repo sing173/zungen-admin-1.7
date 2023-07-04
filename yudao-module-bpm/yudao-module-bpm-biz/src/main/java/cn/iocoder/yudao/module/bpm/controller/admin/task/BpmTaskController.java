@@ -5,6 +5,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.bpm.controller.admin.task.vo.task.*;
 import cn.iocoder.yudao.module.bpm.enums.ErrorCodeConstants;
 import cn.iocoder.yudao.module.bpm.mq.producer.BpmOrderProducer;
+import cn.iocoder.yudao.module.bpm.mq.producer.dto.BpmOrderPoolDTO;
 import cn.iocoder.yudao.module.bpm.service.task.BpmTaskService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -81,7 +82,7 @@ public class BpmTaskController {
         return success(true);
     }
 
-    @GetMapping("/kill")
+    @GetMapping("/order/kill")
     @Operation(summary = "抢单")
     @PreAuthorize("@ss.hasPermission('bpm:crm-input:update')")
     public CommonResult<Boolean> orderKill(@RequestParam("orderType")String orderType,
@@ -92,13 +93,21 @@ public class BpmTaskController {
         switch (killResult.byteValue()) {
             case 1:
                 return success(true);
-            case 0:
-            case -1:
-            case -2:
-            case -3:
+            case 0://已经被抢
+            case -1://没有权限抢单
+            case -2://当前用户重复抢单
+            case -3://每个人员只能抢两张单
             default:
-                return error(ErrorCodeConstants.CRM_INPUT_NOT_EXISTS);
+                return error(ErrorCodeConstants.BPM_ORDER_POOL_DISABLE);
 
         }
+    }
+
+    @GetMapping("/order/search")
+    @Operation(summary = "查询可抢工单")
+    @PreAuthorize("@ss.hasPermission('bpm:crm-input:query')")
+    public CommonResult<List<BpmOrderPoolDTO>> orderSearch(@RequestParam("userId")String userId) {
+
+        return success(bpmOrderProducer.getOrderPoolList(userId));
     }
 }

@@ -2,7 +2,7 @@ package cn.iocoder.yudao.module.system.api.logger;
 
 import cn.iocoder.yudao.module.system.api.logger.dto.OperateLogCreateReqDTO;
 import cn.iocoder.yudao.module.system.service.logger.OperateLogService;
-import org.springframework.stereotype.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  *
  * @author 芋道源码
  */
-@Service
+@DubboService
 @Validated
 public class OperateLogApiImpl implements OperateLogApi {
 

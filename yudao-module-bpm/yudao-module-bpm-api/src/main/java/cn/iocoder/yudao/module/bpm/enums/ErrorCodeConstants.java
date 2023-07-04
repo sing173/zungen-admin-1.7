@@ -64,4 +64,5 @@ public interface ErrorCodeConstants {
 
     // ========== 进件工单 1-009-012-000 ==========
     ErrorCode CRM_INPUT_NOT_EXISTS = new ErrorCode(1009012000, "进件工单不存在");
+    ErrorCode BPM_ORDER_POOL_DISABLE = new ErrorCode(1009012000, "抢单失败");
 }

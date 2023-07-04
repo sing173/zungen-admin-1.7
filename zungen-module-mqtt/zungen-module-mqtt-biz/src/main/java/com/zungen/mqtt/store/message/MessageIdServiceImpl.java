@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 public class MessageIdServiceImpl implements MessageIdService {
     @Override
     public int getNextMessageId() {
+        //TODO 待实现
         return 0;
     }
 }

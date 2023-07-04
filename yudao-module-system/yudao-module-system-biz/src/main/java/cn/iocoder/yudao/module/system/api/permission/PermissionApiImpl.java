@@ -2,7 +2,7 @@ package cn.iocoder.yudao.module.system.api.permission;
 
 import cn.iocoder.yudao.module.system.api.permission.dto.DeptDataPermissionRespDTO;
 import cn.iocoder.yudao.module.system.service.permission.PermissionService;
-import org.springframework.stereotype.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * @author 芋道源码
  */
-@Service
+@DubboService
 public class PermissionApiImpl implements PermissionApi {
 
     @Resource

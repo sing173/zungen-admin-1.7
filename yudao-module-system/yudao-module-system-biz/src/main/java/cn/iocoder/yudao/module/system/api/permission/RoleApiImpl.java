@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.module.system.api.permission;
 
 import cn.iocoder.yudao.module.system.service.permission.RoleService;
-import org.springframework.stereotype.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.Collection;
  *
  * @author 芋道源码
  */
-@Service
+@DubboService
 public class RoleApiImpl implements RoleApi {
 
     @Resource

@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.system.api.user.dto;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Set;
  * @author 芋道源码
  */
 @Data
-public class AdminUserRespDTO {
+public class AdminUserRespDTO implements Serializable {
 
     /**
      * 用户ID

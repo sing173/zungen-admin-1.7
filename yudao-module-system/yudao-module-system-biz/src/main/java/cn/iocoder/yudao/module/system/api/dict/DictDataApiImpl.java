@@ -4,7 +4,7 @@ import cn.iocoder.yudao.module.system.api.dict.dto.DictDataRespDTO;
 import cn.iocoder.yudao.module.system.convert.dict.DictDataConvert;
 import cn.iocoder.yudao.module.system.dal.dataobject.dict.DictDataDO;
 import cn.iocoder.yudao.module.system.service.dict.DictDataService;
-import org.springframework.stereotype.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.Collection;
  *
  * @author 芋道源码
  */
-@Service
+@DubboService
 public class DictDataApiImpl implements DictDataApi {
 
     @Resource

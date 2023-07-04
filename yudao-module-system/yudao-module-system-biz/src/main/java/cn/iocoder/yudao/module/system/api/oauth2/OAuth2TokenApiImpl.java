@@ -6,7 +6,7 @@ import cn.iocoder.yudao.module.system.api.oauth2.dto.OAuth2AccessTokenRespDTO;
 import cn.iocoder.yudao.module.system.convert.auth.OAuth2TokenConvert;
 import cn.iocoder.yudao.module.system.dal.dataobject.oauth2.OAuth2AccessTokenDO;
 import cn.iocoder.yudao.module.system.service.oauth2.OAuth2TokenService;
-import org.springframework.stereotype.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
 
@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  *
  * @author 芋道源码
  */
-@Service
+@DubboService
 public class OAuth2TokenApiImpl implements OAuth2TokenApi {
 
     @Resource

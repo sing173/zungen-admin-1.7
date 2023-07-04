@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.bpm.service.crm.dto;
+package cn.iocoder.yudao.module.bpm.mq.producer.dto;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

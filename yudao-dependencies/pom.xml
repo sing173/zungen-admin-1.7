@@ -21,6 +21,9 @@
         <springdoc.version>1.6.15</springdoc.version>
         <knife4j.version>4.1.0</knife4j.version>
         <servlet.versoin>2.5</servlet.versoin>
+        <!-- RPC 相关 -->
+        <dubbo.version>2.7.15</dubbo.version>
+        <curator.version>2.13.0</curator.version>
         <!-- DB 相关 -->
         <druid.version>1.2.16</druid.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
@@ -81,6 +84,28 @@
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!--Rpc相关 dubbo+zk -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>${curator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator.version}</version>
             </dependency>
 
             <!-- 业务组件 -->

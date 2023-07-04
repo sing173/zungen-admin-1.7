@@ -174,22 +174,4 @@ public class BpmCrmInputServiceImpl implements BpmCrmInputService {
         }
 
     }
-
-
-    public void createTakeOrderQueue() {
-
-
-    }
-
-    public void takeCrmTask(BpmTakeTaskMessage message) {
-        Execution execution = runtimeService.createExecutionQuery()
-                .processInstanceId(message.getProcessInstanceId())
-                .activityId(message.getProcessTaskId())
-                .singleResult();
-
-        
-
-        //继续任务
-        runtimeService.trigger(execution.getId());
-    }
 }

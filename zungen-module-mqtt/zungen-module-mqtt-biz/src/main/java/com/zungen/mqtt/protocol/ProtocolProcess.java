@@ -41,7 +41,7 @@ public class ProtocolProcess {
 
     private PubRel pubRel;
 
-    private PubAck pubAck;
+    private PubBack pubBack;
 
     private PubRec pubRec;
 
@@ -94,11 +94,11 @@ public class ProtocolProcess {
         return pubRel;
     }
 
-    public PubAck pubAck() {
-        if (pubAck == null) {
-            pubAck = new PubAck(dupPublishMessageStoreService);
+    public PubBack pubBack() {
+        if (pubBack == null) {
+            pubBack = new PubBack(dupPublishMessageStoreService);
         }
-        return pubAck;
+        return pubBack;
     }
 
     public PubRec pubRec() {

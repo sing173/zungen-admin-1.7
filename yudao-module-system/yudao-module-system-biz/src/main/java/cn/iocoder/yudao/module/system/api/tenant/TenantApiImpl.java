@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.module.system.api.tenant;
 
 import cn.iocoder.yudao.module.system.service.tenant.TenantService;
-import org.springframework.stereotype.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author 芋道源码
  */
-@Service
+@DubboService
 public class TenantApiImpl implements TenantApi {
 
     @Resource

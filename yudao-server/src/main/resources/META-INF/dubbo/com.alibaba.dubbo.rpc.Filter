@@ -1,0 +1,1 @@
+dubboFilter=cn.iocoder.yudao.server.rpc.DubboProviderFilter

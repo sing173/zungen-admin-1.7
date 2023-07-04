@@ -13,7 +13,7 @@ import cn.iocoder.yudao.module.bpm.dal.dataobject.crm.BpmCrmInputDO;
 import cn.iocoder.yudao.module.bpm.mq.message.BpmTaskMqttMessage;
 import cn.iocoder.yudao.module.bpm.mq.message.BpmTaskNotifyMessage;
 import cn.iocoder.yudao.module.bpm.service.crm.BpmCrmInputService;
-import cn.iocoder.yudao.module.bpm.service.crm.dto.BpmOrderPoolDTO;
+import cn.iocoder.yudao.module.bpm.mq.producer.dto.BpmOrderPoolDTO;
 import org.flowable.common.engine.api.delegate.Expression;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.ExecutionListener;

@@ -4,7 +4,7 @@ import cn.iocoder.yudao.module.system.api.user.dto.AdminUserRespDTO;
 import cn.iocoder.yudao.module.system.convert.user.UserConvert;
 import cn.iocoder.yudao.module.system.dal.dataobject.user.AdminUserDO;
 import cn.iocoder.yudao.module.system.service.user.AdminUserService;
-import org.springframework.stereotype.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author 芋道源码
  */
-@Service
+@DubboService
 public class AdminUserApiImpl implements AdminUserApi {
 
     @Resource

@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.system.api.permission.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  * @author 芋道源码
  */
 @Data
-public class DeptDataPermissionRespDTO {
+public class DeptDataPermissionRespDTO implements Serializable {
 
     /**
      * 是否可查看全部数据

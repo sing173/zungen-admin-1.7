@@ -57,6 +57,6 @@ public class BpmTaskMqttMessage extends AbstractStreamMessage {
 
     @Override
     public String getStreamKey() {
-        return "bpm.order.task";
+        return "bpm.order.mqtt";
     }
 }

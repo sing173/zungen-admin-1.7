@@ -1,5 +1,6 @@
 package com.zungen.mqtt.store.cache;
 
+import cn.hutool.core.util.StrUtil;
 import com.zungen.mqtt.store.message.DupPubRelMessageStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,7 +19,7 @@ public class DupPubRelMessageCache {
 
 
     public DupPubRelMessageStore put(String clientId, Integer messageId, DupPubRelMessageStore dupPubRelMessageStore){
-        redisCacheTemplate.opsForHash().put(CACHE_PRE + clientId,String.valueOf(messageId),dupPubRelMessageStore);
+        redisCacheTemplate.opsForHash().put(CACHE_PRE + clientId,StrUtil.toString(messageId),dupPubRelMessageStore);
         return dupPubRelMessageStore;
     }
 
@@ -37,7 +38,7 @@ public class DupPubRelMessageCache {
     }
 
     public void remove(String clientId,Integer messageId){
-        redisCacheTemplate.opsForHash().delete(CACHE_PRE + clientId,messageId);
+        redisCacheTemplate.opsForHash().delete(CACHE_PRE + clientId, StrUtil.toString(messageId));
     }
     public void remove(String clientId){
         redisCacheTemplate.delete(CACHE_PRE + clientId);

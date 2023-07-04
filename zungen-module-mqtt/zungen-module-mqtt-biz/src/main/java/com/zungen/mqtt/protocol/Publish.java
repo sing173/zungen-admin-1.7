@@ -41,7 +41,8 @@ public class Publish {
                     sessionStoreService.get(subscribeStore.getClientId()).getChannel().writeAndFlush(publishMessage);
                 }
                 if (respQoS == MqttQoS.AT_LEAST_ONCE) {
-                    int messageId = messageIdService.getNextMessageId();
+                    //TODO 获取messageId待实现，
+                    int messageId = messageIdService.getNextMessageId() + 1;
                     MqttPublishMessage publishMessage = (MqttPublishMessage) MqttMessageFactory.newMessage(
                             new MqttFixedHeader(MqttMessageType.PUBLISH, dup, respQoS, retain, 0),
                             new MqttPublishVariableHeader(topic, messageId), Unpooled.buffer().writeBytes(messageBytes));

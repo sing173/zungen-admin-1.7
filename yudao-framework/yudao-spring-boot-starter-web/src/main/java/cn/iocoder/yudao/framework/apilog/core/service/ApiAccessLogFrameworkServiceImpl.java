@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.iocoder.yudao.module.infra.api.logger.ApiAccessLogApi;
 import cn.iocoder.yudao.module.infra.api.logger.dto.ApiAccessLogCreateReqDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
  *
  * @author 芋道源码
  */
+@Slf4j
 @RequiredArgsConstructor
 public class ApiAccessLogFrameworkServiceImpl implements ApiAccessLogFrameworkService {
 

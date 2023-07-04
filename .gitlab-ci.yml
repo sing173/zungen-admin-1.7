@@ -8,7 +8,7 @@ variables:
   DOCKER_DRIVER: overlay2
   
   # maven 构建生成的jar包或jar包相对于源码家目录的路径
-  APP_FILE_PATH: "zungen-server/target/*.jar"
+  APP_FILE_PATH: "yudao-server/target/*.jar"
   
   # 生成docker容器的基础镜像名称，设置成私有仓库进行加快镜像构建速度，如不设置默认从互联网下载
   BASE_IMAGE: "192.168.1.172:5001/java:8"

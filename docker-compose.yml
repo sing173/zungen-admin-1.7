@@ -1,0 +1,14 @@
+version: '1.7.1'
+services:
+  zungen-admin:
+    image: $REGISTRY_ADDRESS/zungen-admin:$CI_COMMIT_SHORT_SHA
+    restart: always
+    network_mode: host
+    environment:
+      - profileActive=${RUN_ENV}
+    volumes:
+      - "/logs/assemble:/logs"
+    logging:
+           driver: "json-file"
+           options:
+              max-size: "5m"

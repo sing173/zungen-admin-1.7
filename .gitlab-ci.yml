@@ -1,0 +1,130 @@
+variables:
+  # maven缓存相关配置
+  MAVEN_CLI_OPTS: "-s settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  
+  # DOCKER_HOST 和 DOCKER_DRIVER 用于连接宿主机docker服务
+  DOCKER_HOST: tcp://192.168.1.172:2375
+  DOCKER_DRIVER: overlay2
+  
+  # maven 构建生成的jar包或jar包相对于源码家目录的路径
+  APP_FILE_PATH: "zungen-server/target/*.jar"
+  
+  # 生成docker容器的基础镜像名称，设置成私有仓库进行加快镜像构建速度，如不设置默认从互联网下载
+  BASE_IMAGE: "192.168.1.172:5001/java:8"
+  
+  # 镜像仓库地址
+  REGISTRY_ADDRESS: "192.168.1.172:5001"
+  
+  # 将容器部署到这个主机上，需将容器的237端口开启，更改docker.service文件在“ExecStart=”加上“-H tcp://0.0.0.0:2375”
+  DEPLOY_TO_HOST: "tcp://192.168.1.172:2375"
+
+    
+## 缓存maven仓库提高编译速度
+#cache:
+#  key: maven-repo
+#  paths:
+#    - .m2/repository/
+
+
+# 执行条件
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - when: never
+
+# 定义整个CI/CD步骤
+stages:
+  - maven_build
+  - docker_build
+  - deploy
+  
+  
+# artifacts保存maven生成的产物用于后续步骤构建镜像
+# only：web 定义pipeline手动触发执行
+# tags：docker 定义拥有docker这个tag的runner才能调动该步骤
+maven_build:
+  image: $REGISTRY_ADDRESS/maven:3.8.2-jdk-8
+  stage: maven_build
+  script:
+    - mvn $MAVEN_CLI_OPTS clean install -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - $APP_FILE_PATH
+    expire_in: 1 day  
+  tags:
+    - docker          
+
+
+# rules触发该段代码运行的前提条件，变量RUN_ENV的值为test时将触发该段代码执行
+# 该段代码的作用是使用maven_build阶段生成的中间产物构建镜像并上传到镜像仓库，用于后续docker-compose远程部署
+build_test_image:
+  before_script:
+    - docker info
+    - docker login $REGISTRY_ADDRESS -u admin -p $REGISTRY_PASSWORD
+  image: $REGISTRY_ADDRESS/docker:19.03.13
+  stage: docker_build
+  script:
+    - export RUN_ENV=dev
+    - docker build --build-arg APP_FILE_PATH --build-arg BASE_IMAGE --build-arg RUN_ENV -t $REGISTRY_ADDRESS/zungen-admin:$CI_COMMIT_SHORT_SHA .
+    - docker push $REGISTRY_ADDRESS/zungen-admin:$CI_COMMIT_SHORT_SHA
+  tags:
+    - docker
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+
+
+# 构建阿里云镜像
+#build_aliyun_image:
+#  before_script:
+#    - docker info
+#    - docker login $REGISTRY_ADDRESS -u admin -p $REGISTRY_PASSWORD
+#  image: $REGISTRY_ADDRESS/docker:19.03.13
+#  stage: docker_build
+#  script:
+#    - export RUN_ENV=aliyun
+#    - docker build --build-arg APP_FILE_PATH --build-arg BASE_IMAGE --build-arg RUN_ENV -t $REGISTRY_ADDRESS/wb-assemble:$CI_COMMIT_SHORT_SHA .
+#    - docker save $REGISTRY_ADDRESS/wb-assemble:$CI_COMMIT_SHORT_SHA -o wb-assemble.tar
+#    - chmod 777 wb-assemble.tar
+#  tags:
+#    - docker
+#  artifacts:
+#    paths:
+#      - ./wb-assemble.tar
+#  rules:
+#    - if: '$CI_COMMIT_MESSAGE =~ /^aliyun/'
+
+
+# 通过docker-compose部署
+deploy_to_test:
+  before_script:
+    - docker-compose version
+  image: $REGISTRY_ADDRESS/docker-compose:19.03
+  stage: deploy 
+  script:
+    - echo "部署到:192.168.1.172"
+    - export RUN_ENV=dev
+    - docker-compose -f docker-compose.yml -H $DEPLOY_TO_HOST up -d   
+  tags:
+    - docker  
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+
+
+# 拷贝docker-compose.yml和镜像tar包到阿里云服务器上并运行    
+deploy_to_aliyun:
+  stage: deploy
+  image: $REGISTRY_ADDRESS/centos-ssh:7
+  after_script:
+    - ssh zungen@8.134.69.61 "rm -f /tmp/wb-assemble.tar && rm -f /tmp/docker-compose.yml"
+  script:
+    - scp wb-assemble.tar zungen@8.134.69.61:/tmp 
+    - sed -i "s#\$REGISTRY_ADDRESS#$REGISTRY_ADDRESS#g" docker-compose.yml 
+    - sed -i "s#\$CI_COMMIT_SHORT_SHA#$CI_COMMIT_SHORT_SHA#g" docker-compose.yml 
+    - sed -i "s#\${RUN_ENV}#aliyun#g" docker-compose.yml
+    - scp docker-compose.yml zungen@8.134.69.61:/tmp
+    - ssh zungen@8.134.69.61 "docker load -i /tmp/wb-assemble.tar && docker-compose -f /tmp/docker-compose.yml up -d"
+  tags:
+    - docker     
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /^aliyun/'

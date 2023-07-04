@@ -1,4 +1,4 @@
-version: '1.7.1'
+version: '3.1'
 services:
   zungen-admin:
     image: $REGISTRY_ADDRESS/zungen-admin:$CI_COMMIT_SHORT_SHA

@@ -6,7 +6,7 @@ services:
     network_mode: host
     environment:
       - profileActive=${RUN_ENV}
-      - DUBBO_IP_TO_REGISTRY= 192.168.1.172
+      - DUBBO_IP_TO_REGISTRY=192.168.1.172
     volumes:
       - "/logs/assemble:/logs"
     logging:

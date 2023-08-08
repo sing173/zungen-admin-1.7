@@ -6,9 +6,13 @@ import cn.iocoder.yudao.framework.common.util.io.IoUtils;
 import cn.iocoder.yudao.module.bpm.controller.admin.definition.vo.model.*;
 import cn.iocoder.yudao.module.bpm.convert.definition.BpmModelConvert;
 import cn.iocoder.yudao.module.bpm.service.definition.BpmModelService;
+import com.zungen.wb.api.business.BusinessAreaFeign;
+import com.zungen.wb.api.design.BusinessEventFeign;
+import com.zungen.wb.model.business.BusinessAreaDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +29,11 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 @RequestMapping("/bpm/model")
 @Validated
 public class BpmModelController {
+    @DubboReference
+    private BusinessAreaFeign businessAreaApi;
+
+    @DubboReference
+    private BusinessEventFeign businessEventApi;
 
     @Resource
     private BpmModelService modelService;

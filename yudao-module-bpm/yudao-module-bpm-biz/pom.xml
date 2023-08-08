@@ -31,6 +31,16 @@
             <artifactId>yudao-module-crm-api</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>com.zungen.wb</groupId>
+            <artifactId>wb-module-strategy-api</artifactId>
+            <version>0.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zungen.wb</groupId>
+            <artifactId>wb-common-base</artifactId>
+            <version>0.2.0</version>
+        </dependency>
 
         <!-- 业务组件 -->
         <dependency>
@@ -59,6 +69,16 @@
         <dependency>
             <groupId>cn.iocoder.boot</groupId>
             <artifactId>yudao-spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!--Rpc相关 dubbo -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
         </dependency>
 
         <!-- DB 相关 -->

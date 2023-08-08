@@ -7,6 +7,7 @@ import cn.iocoder.yudao.framework.mq.core.pubsub.AbstractChannelMessage;
 import cn.iocoder.yudao.framework.mq.core.stream.AbstractStreamMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.stream.RecordId;
 import org.springframework.data.redis.connection.stream.StreamRecords;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,6 +20,7 @@ import java.util.List;
  *
  * @author 芋道源码
  */
+//@Slf4j
 @AllArgsConstructor
 public class RedisMQTemplate {
 
@@ -54,6 +56,7 @@ public class RedisMQTemplate {
     public <T extends AbstractStreamMessage> RecordId send(T message) {
         try {
             sendMessageBefore(message);
+//            log.info("[sendMessage][消息内容({}),streamKey({})]", message, message.getStreamKey());
             // 发送消息
             return redisTemplate.opsForStream().add(StreamRecords.newRecord()
                     .ofObject(JsonUtils.toJsonString(message)) // 设置内容

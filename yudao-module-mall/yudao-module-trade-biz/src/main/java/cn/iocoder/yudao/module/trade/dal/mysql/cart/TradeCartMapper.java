@@ -19,7 +19,8 @@ public interface TradeCartMapper extends BaseMapperX<TradeCartDO> {
 
     default TradeCartDO selectByUserIdAndSkuId(Long userId, Long skuId,
                                                Boolean addStatus, Boolean orderStatus) {
-        return selectOne(new LambdaQueryWrapper<TradeCartDO>().eq(TradeCartDO::getUserId, userId)
+        return selectOne(new LambdaQueryWrapper<TradeCartDO>()
+                .eq(TradeCartDO::getUserId, userId)
                 .eq(TradeCartDO::getSkuId, skuId)
                 .eq(TradeCartDO::getAddStatus, addStatus)
                 .eq(TradeCartDO::getOrderStatus, orderStatus));

@@ -24,6 +24,7 @@
         <!-- RPC 相关 -->
         <dubbo.version>2.7.15</dubbo.version>
         <curator.version>2.13.0</curator.version>
+        <feign.version>11.0</feign.version>
         <!-- DB 相关 -->
         <druid.version>1.2.18</druid.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
@@ -108,6 +109,18 @@
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
+            </dependency>
+            <!-- 引入 Feign 相关依赖作为调用外部api的客户端 -->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-core</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+            <!-- 引入 Feign jackson 拓展的依赖 -->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-jackson</artifactId>
+                <version>${feign.version}</version>
             </dependency>
 
             <!-- 业务组件 -->

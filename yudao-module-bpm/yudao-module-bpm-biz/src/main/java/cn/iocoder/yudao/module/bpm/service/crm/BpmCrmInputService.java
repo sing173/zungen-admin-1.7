@@ -1,12 +1,13 @@
 package cn.iocoder.yudao.module.bpm.service.crm;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.bpm.api.BpmVarApi;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputCreateReqVO;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputExportReqVO;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputPageReqVO;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputVarUpdateVO;
 import cn.iocoder.yudao.module.bpm.dal.dataobject.crm.BpmCrmInputDO;
-import org.springframework.web.bind.annotation.RequestBody;
+import cn.iocoder.yudao.module.bpm.service.BpmVarService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Map;
  *
  * @author admin
  */
-public interface BpmCrmInputService {
+public interface BpmCrmInputService extends BpmVarService {
 
     /**
      * 创建进件工单

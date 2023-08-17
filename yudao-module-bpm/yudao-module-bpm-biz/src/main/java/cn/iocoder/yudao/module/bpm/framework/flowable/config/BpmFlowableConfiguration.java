@@ -2,9 +2,8 @@ package cn.iocoder.yudao.module.bpm.framework.flowable.config;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.iocoder.yudao.module.bpm.framework.flowable.core.behavior.BpmActivityBehaviorFactory;
+import cn.iocoder.yudao.module.bpm.framework.flowable.core.behavior.BpmDecisionServiceTaskActivityBehavior;
 import cn.iocoder.yudao.module.bpm.service.definition.BpmTaskAssignRuleService;
-import com.zungen.wb.api.design.BusinessEventFeign;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.flowable.common.engine.api.delegate.event.FlowableEventListener;
 import org.flowable.spring.SpringProcessEngineConfiguration;
 import org.flowable.spring.boot.EngineConfigurationConfigurer;
@@ -20,8 +19,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class BpmFlowableConfiguration {
 
-    @DubboReference
-    private BusinessEventFeign businessEventApi;
+//    @DubboReference
+//    private BusinessEventFeign businessEventApi;
 
     /**
      * BPM 模块的 ProcessEngineConfigurationConfigurer 实现类：
@@ -45,9 +44,12 @@ public class BpmFlowableConfiguration {
     public BpmActivityBehaviorFactory bpmActivityBehaviorFactory(BpmTaskAssignRuleService taskRuleService) {
         BpmActivityBehaviorFactory bpmActivityBehaviorFactory = new BpmActivityBehaviorFactory();
         bpmActivityBehaviorFactory
-                .setBpmTaskRuleService(taskRuleService)
-                .setBusinessEventApi(businessEventApi);
+                .setBpmTaskRuleService(taskRuleService);
         return bpmActivityBehaviorFactory;
     }
 
+    @Bean
+    public BpmDecisionServiceTaskActivityBehavior bpmDecisionServiceTaskActivityBehavior() {
+        return new BpmDecisionServiceTaskActivityBehavior();
+    }
 }

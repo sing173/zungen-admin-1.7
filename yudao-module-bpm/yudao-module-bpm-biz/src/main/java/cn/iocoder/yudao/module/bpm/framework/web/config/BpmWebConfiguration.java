@@ -1,6 +1,10 @@
 package cn.iocoder.yudao.module.bpm.framework.web.config;
 
 import cn.iocoder.yudao.framework.swagger.config.YudaoSwaggerAutoConfiguration;
+import cn.iocoder.yudao.module.bpm.api.feign.ZDEFeignClient;
+import feign.Feign;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
@@ -70,4 +74,11 @@ public class BpmWebConfiguration {
         return webEndpointProperties.getDiscovery().isEnabled() && (StringUtils.hasText(basePath) || ManagementPortType.get(environment).equals(ManagementPortType.DIFFERENT));
     }
 
+    @Bean
+    public ZDEFeignClient zdeFeignClient() {
+        return Feign.builder()
+                .encoder(new JacksonEncoder())
+                .decoder(new JacksonDecoder())
+                .target(ZDEFeignClient.class, "http://192.168.1.172:8889");
+    }
 }

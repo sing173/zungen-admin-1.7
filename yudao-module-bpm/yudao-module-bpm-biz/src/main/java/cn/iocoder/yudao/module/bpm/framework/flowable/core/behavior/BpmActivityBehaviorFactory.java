@@ -38,14 +38,18 @@ public class BpmActivityBehaviorFactory extends DefaultActivityBehaviorFactory {
                 .setBpmTaskRuleService(bpmTaskRuleService);
     }
 
-    @Override
-    public ClassDelegate createClassDelegateServiceTask(ServiceTask serviceTask) {
-
-        return new BpmDecisionServiceTaskActivityBehavior(serviceTask.getId(), serviceTask.getImplementation(),
-                this.createFieldDeclarations(serviceTask.getFieldExtensions()), serviceTask.isTriggerable(),
-                this.getSkipExpressionFromServiceTask(serviceTask),
-                serviceTask.getMapExceptions()).setBusinessEventApi(businessEventApi);
-    }
+//    @Override
+//    public ClassDelegate createClassDelegateServiceTask(ServiceTask serviceTask) {
+//
+//        if(serviceTask.getImplementation().equals("cn.iocoder.yudao.module.bpm.framework.flowable.core.behavior.BpmDecisionServiceTaskActivityBehavior")) {
+//            return new BpmDecisionServiceTaskActivityBehavior(serviceTask.getId(), serviceTask.getImplementation(),
+//                    this.createFieldDeclarations(serviceTask.getFieldExtensions()), serviceTask.isTriggerable(),
+//                    this.getSkipExpressionFromServiceTask(serviceTask),
+//                    serviceTask.getMapExceptions()).setBusinessEventApi(businessEventApi);
+//        } else {
+//            return super.createClassDelegateServiceTask(serviceTask);
+//        }
+//    }
 
     @Override
     public ParallelMultiInstanceBehavior createParallelMultiInstanceBehavior(Activity activity,

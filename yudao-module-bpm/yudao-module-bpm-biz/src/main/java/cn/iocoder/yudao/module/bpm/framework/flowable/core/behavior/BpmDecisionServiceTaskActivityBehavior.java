@@ -1,19 +1,34 @@
 package cn.iocoder.yudao.module.bpm.framework.flowable.core.behavior;
 
+import cn.iocoder.yudao.module.bpm.api.feign.ZDEFeignClient;
+import cn.iocoder.yudao.module.bpm.service.BpmVarServiceProxy;
+import cn.iocoder.yudao.module.bpm.service.task.BpmProcessInstanceService;
+import com.alibaba.fastjson.JSON;
+import com.zungen.common.message.EventInData;
+import com.zungen.common.message.EventOutData;
+import com.zungen.common.message.JsonMessage;
+import com.zungen.common.message.JsonMessageHeader;
 import com.zungen.wb.api.design.BusinessEventFeign;
-import lombok.Setter;
+import com.zungen.wb.model.business.BusinessEventDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.flowable.bpmn.model.MapExceptionEntry;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.FormService;
+import org.flowable.engine.TaskService;
 import org.flowable.engine.delegate.DelegateExecution;
-import org.flowable.engine.impl.bpmn.helper.ClassDelegate;
-import org.flowable.engine.impl.bpmn.parser.FieldDeclaration;
+import org.flowable.engine.delegate.JavaDelegate;
+import org.flowable.engine.form.StartFormData;
 
-import java.util.List;
+import org.flowable.engine.form.TaskFormData;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.Map;
 
 @Slf4j
-public class BpmDecisionServiceTaskActivityBehavior extends ClassDelegate {
-
+@Component
+public class BpmDecisionServiceTaskActivityBehavior implements JavaDelegate {
     /**
      * 决策平台业务领域id
      */
@@ -24,30 +39,54 @@ public class BpmDecisionServiceTaskActivityBehavior extends ClassDelegate {
      */
     private Expression businessEventId;
 
+    /**
+     * 决策数据来源的表名
+     */
     private Expression dataTableName;
 
+    /**
+     * 数据源id
+     */
     private Expression dataId;
 
-    @Setter
+    @DubboReference
     private BusinessEventFeign businessEventApi;
 
+    @Resource
+    private ZDEFeignClient zdeFeignClient;
 
-    public BpmDecisionServiceTaskActivityBehavior(String id, String implementation, List<FieldDeclaration> fieldDeclarations, boolean triggerable, Expression skipExpressionFromServiceTask, List<MapExceptionEntry> mapExceptions) {
-        super(id, implementation, fieldDeclarations, triggerable, skipExpressionFromServiceTask, mapExceptions);
-    }
-
+    @Resource
+    @Lazy // 解决循环依赖
+    private FormService formService;
 
     @Override
-    public void execute(DelegateExecution delegateExecution) {
-        //获取数据源
-        log.info("BpmDecisionServiceTaskActivityBehavior execute in:" + businessAreaId.getExpressionText());
+    public void execute(DelegateExecution execution) {
+        String dataTableNameTxt = dataTableName.getExpressionText();
+         //通过代理获取工作流当前节点绑定表单的数据接口
+        BpmVarServiceProxy bpmVarServiceProxy = BpmVarServiceProxy.getInstance(dataTableNameTxt);
+        Long dataIdL = (Long) execution.getVariable(dataId.getExpressionText());
+        //获取表单数据作为决策的数据输入源
+        Map<String, Object> dataSourceVarMap = bpmVarServiceProxy.getBpmVars(dataTableNameTxt, dataIdL);
+        //获取决策事件
+        BusinessEventDTO businessEventDTO = businessEventApi.findById(businessEventId.getExpressionText());
+        //构建决策引擎-前置的消息请求对象
+        JsonMessageHeader header = new JsonMessageHeader();
+        header.setEventCode(businessEventDTO.getCode());
+        header.setDataClassFullName(bpmVarServiceProxy.classFullName);
+        JsonMessage<Map<String, Object>> message = new JsonMessage<>(header, dataSourceVarMap);
+        //通过feign客户端发送http请求到决策前置服务，同步获取决策结果
+        JsonMessage<EventOutData> eventOutMessage = zdeFeignClient.decision(JSON.toJSONString(message));
+        log.info("BpmDecisionServiceTaskActivityBehavior out:" + eventOutMessage.toString());
 
-        //查询决策事件信息
+        //把决策结果设置到流程变量中
+        EventOutData eventOutData = eventOutMessage.getBody();
+        eventOutData.getResultVars().forEach(execution::setVariable);
 
-
-        //发起决策请求
+        StartFormData formData = formService.getStartFormData(execution.getProcessDefinitionId());
+        formData.getFormProperties().forEach(formProperty -> {
+            log.info("formProperty:" + formProperty.getName());
+        });
 
 
     }
-
 }

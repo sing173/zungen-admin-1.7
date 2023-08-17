@@ -15,6 +15,7 @@ import cn.iocoder.yudao.module.bpm.convert.crm.BpmCrmInputConvert;
 import cn.iocoder.yudao.module.bpm.dal.dataobject.crm.BpmCrmInputDO;
 import cn.iocoder.yudao.module.bpm.dal.mysql.crm.BpmCrmInputMapper;
 import cn.iocoder.yudao.module.bpm.mq.message.BpmTakeTaskMessage;
+import cn.iocoder.yudao.module.bpm.service.BpmVarService;
 import cn.iocoder.yudao.module.bpm.service.task.BpmProcessInstanceService;
 import cn.iocoder.yudao.module.crm.api.CrmCustomerApi;
 import cn.iocoder.yudao.module.crm.api.dto.CrmCustomerDTO;

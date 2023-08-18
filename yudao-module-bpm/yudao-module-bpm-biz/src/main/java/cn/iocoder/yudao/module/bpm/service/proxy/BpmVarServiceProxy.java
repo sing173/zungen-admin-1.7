@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.bpm.service;
+package cn.iocoder.yudao.module.bpm.service.proxy;
 
 import cn.hutool.extra.spring.SpringUtil;
 import cn.iocoder.yudao.module.bpm.enums.ErrorCodeConstants;

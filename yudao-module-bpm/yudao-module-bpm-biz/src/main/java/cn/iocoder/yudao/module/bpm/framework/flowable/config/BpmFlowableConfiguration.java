@@ -2,7 +2,7 @@ package cn.iocoder.yudao.module.bpm.framework.flowable.config;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.iocoder.yudao.module.bpm.framework.flowable.core.behavior.BpmActivityBehaviorFactory;
-import cn.iocoder.yudao.module.bpm.framework.flowable.core.behavior.BpmDecisionServiceTaskActivityBehavior;
+import cn.iocoder.yudao.module.bpm.framework.flowable.core.listener.BpmDecisionServiceTaskDelegate;
 import cn.iocoder.yudao.module.bpm.service.definition.BpmTaskAssignRuleService;
 import org.flowable.common.engine.api.delegate.event.FlowableEventListener;
 import org.flowable.spring.SpringProcessEngineConfiguration;
@@ -49,7 +49,7 @@ public class BpmFlowableConfiguration {
     }
 
     @Bean
-    public BpmDecisionServiceTaskActivityBehavior bpmDecisionServiceTaskActivityBehavior() {
-        return new BpmDecisionServiceTaskActivityBehavior();
+    public BpmDecisionServiceTaskDelegate bpmDecisionServiceTaskDelegate() {
+        return new BpmDecisionServiceTaskDelegate();
     }
 }

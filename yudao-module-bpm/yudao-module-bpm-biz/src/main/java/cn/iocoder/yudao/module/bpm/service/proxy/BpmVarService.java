@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.bpm.service;
+package cn.iocoder.yudao.module.bpm.service.proxy;
 
 import java.util.Map;
 

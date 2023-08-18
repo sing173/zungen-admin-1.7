@@ -1,13 +1,12 @@
 package cn.iocoder.yudao.module.bpm.service.crm;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.module.bpm.api.BpmVarApi;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputCreateReqVO;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputExportReqVO;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputPageReqVO;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputVarUpdateVO;
 import cn.iocoder.yudao.module.bpm.dal.dataobject.crm.BpmCrmInputDO;
-import cn.iocoder.yudao.module.bpm.service.BpmVarService;
+import cn.iocoder.yudao.module.bpm.service.proxy.BpmVarService;
 
 import javax.validation.Valid;
 import java.util.List;

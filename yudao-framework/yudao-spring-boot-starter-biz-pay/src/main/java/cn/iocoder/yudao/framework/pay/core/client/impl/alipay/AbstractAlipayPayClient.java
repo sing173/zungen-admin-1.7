@@ -27,6 +27,7 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,6 +48,7 @@ import static cn.hutool.core.date.DatePattern.NORM_DATETIME_FORMATTER;
 @Slf4j
 public abstract class AbstractAlipayPayClient extends AbstractPayClient<AlipayPayClientConfig> {
 
+    @Getter // 仅用于单测场景
     protected DefaultAlipayClient client;
 
     public AbstractAlipayPayClient(Long channelId, String channelCode, AlipayPayClientConfig config) {
@@ -148,7 +150,7 @@ public abstract class AbstractAlipayPayClient extends AbstractPayClient<AlipayPa
         // 2.1 执行请求
         AlipayTradeRefundResponse response = client.execute(request);
         if (!response.isSuccess()) {
-            return PayRefundRespDTO.failureOf(reqDTO.getOutRefundNo(), response);
+            return PayRefundRespDTO.failureOf(response.getSubCode(), response.getSubMsg(), reqDTO.getOutRefundNo(), response);
         }
         // 2.2 创建返回结果
         // 支付宝只要退款调用返回 success，就认为退款成功，不需要回调。具体可见 parseNotify 方法的说明。

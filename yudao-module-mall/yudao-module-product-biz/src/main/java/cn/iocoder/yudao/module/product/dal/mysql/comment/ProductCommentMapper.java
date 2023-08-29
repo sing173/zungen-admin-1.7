@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.module.product.dal.mysql.comment;
 
-
 import cn.hutool.core.util.ObjectUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -20,24 +19,26 @@ public interface ProductCommentMapper extends BaseMapperX<ProductCommentDO> {
                 .eqIfPresent(ProductCommentDO::getOrderId, reqVO.getOrderId())
                 .eqIfPresent(ProductCommentDO::getSpuId, reqVO.getSpuId())
                 .eqIfPresent(ProductCommentDO::getScores, reqVO.getScores())
+                .eqIfPresent(ProductCommentDO::getReplyStatus, reqVO.getReplyStatus())
                 .betweenIfPresent(ProductCommentDO::getCreateTime, reqVO.getCreateTime())
                 .likeIfPresent(ProductCommentDO::getSpuName, reqVO.getSpuName())
                 .orderByDesc(ProductCommentDO::getId));
     }
 
     static void appendTabQuery(LambdaQueryWrapperX<ProductCommentDO> queryWrapper, Integer type) {
-        // TODO @puhui999：是不是不用 apply 拉？直接用 mybatis 的方法就好啦
+        LambdaQueryWrapperX<ProductCommentDO> queryWrapperX = new LambdaQueryWrapperX<>();
         // 构建好评查询语句：好评计算 总评 >= 4
         if (ObjectUtil.equal(type, AppCommentPageReqVO.GOOD_COMMENT)) {
-            queryWrapper.apply("scores >= 4");
+            queryWrapperX.ge(ProductCommentDO::getScores, 4);
         }
         // 构建中评查询语句：中评计算 总评 >= 3 且 总评 < 4
         if (ObjectUtil.equal(type, AppCommentPageReqVO.MEDIOCRE_COMMENT)) {
-            queryWrapper.apply("scores >=3 and scores < 4");
+            queryWrapperX.ge(ProductCommentDO::getScores, 3);
+            queryWrapperX.lt(ProductCommentDO::getScores, 4);
         }
         // 构建差评查询语句：差评计算 总评 < 3
         if (ObjectUtil.equal(type, AppCommentPageReqVO.NEGATIVE_COMMENT)) {
-            queryWrapper.apply("scores < 3");
+            queryWrapperX.lt(ProductCommentDO::getScores, 3);
         }
     }
 
@@ -52,11 +53,10 @@ public interface ProductCommentMapper extends BaseMapperX<ProductCommentDO> {
         return selectPage(reqVO, queryWrapper);
     }
 
-    default ProductCommentDO selectByUserIdAndOrderItemIdAndSpuId(Long userId, Long orderItemId, Long skuId) {
+    default ProductCommentDO selectByUserIdAndOrderItemId(Long userId, Long orderItemId) {
         return selectOne(new LambdaQueryWrapperX<ProductCommentDO>()
                 .eq(ProductCommentDO::getUserId, userId)
-                .eq(ProductCommentDO::getOrderItemId, orderItemId)
-                .eq(ProductCommentDO::getSpuId, skuId));
+                .eq(ProductCommentDO::getOrderItemId, orderItemId));
     }
 
     default Long selectCountBySpuId(Long spuId, Boolean visible, Integer type) {

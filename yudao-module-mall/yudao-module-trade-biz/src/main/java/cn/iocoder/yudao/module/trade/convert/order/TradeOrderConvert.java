@@ -1,9 +1,9 @@
 package cn.iocoder.yudao.module.trade.convert.order;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
+import cn.iocoder.yudao.framework.common.util.string.StrUtils;
 import cn.iocoder.yudao.framework.dict.core.util.DictFrameworkUtils;
 import cn.iocoder.yudao.framework.ip.core.utils.AreaUtils;
 import cn.iocoder.yudao.module.member.api.address.dto.AddressRespDTO;
@@ -22,7 +22,7 @@ import cn.iocoder.yudao.module.trade.controller.app.base.property.AppProductProp
 import cn.iocoder.yudao.module.trade.controller.app.order.vo.*;
 import cn.iocoder.yudao.module.trade.controller.app.order.vo.item.AppTradeOrderItemCommentCreateReqVO;
 import cn.iocoder.yudao.module.trade.controller.app.order.vo.item.AppTradeOrderItemRespVO;
-import cn.iocoder.yudao.module.trade.dal.dataobject.cart.TradeCartDO;
+import cn.iocoder.yudao.module.trade.dal.dataobject.cart.CartDO;
 import cn.iocoder.yudao.module.trade.dal.dataobject.delivery.DeliveryExpressDO;
 import cn.iocoder.yudao.module.trade.dal.dataobject.order.TradeOrderDO;
 import cn.iocoder.yudao.module.trade.dal.dataobject.order.TradeOrderItemDO;
@@ -36,8 +36,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMultiMap;
@@ -82,13 +84,22 @@ public interface TradeOrderConvert {
 
     TradeOrderItemDO convert(TradePriceCalculateRespBO.OrderItem item);
 
+    default ProductSkuUpdateStockReqDTO convert(List<TradeOrderItemDO> list) {
+        return new ProductSkuUpdateStockReqDTO(TradeOrderConvert.INSTANCE.convertList(list));
+    }
+
+    default ProductSkuUpdateStockReqDTO convertNegative(List<TradeOrderItemDO> list) {
+        List<ProductSkuUpdateStockReqDTO.Item> items = TradeOrderConvert.INSTANCE.convertList(list);
+        items.forEach(item -> item.setIncrCount(-item.getIncrCount()));
+        return new ProductSkuUpdateStockReqDTO(items);
+    }
+    List<ProductSkuUpdateStockReqDTO.Item> convertList(List<TradeOrderItemDO> list);
+
     @Mappings({
             @Mapping(source = "skuId", target = "id"),
             @Mapping(source = "count", target = "incrCount"),
     })
     ProductSkuUpdateStockReqDTO.Item convert(TradeOrderItemDO bean);
-
-    List<ProductSkuUpdateStockReqDTO.Item> convertList(List<TradeOrderItemDO> list);
 
     default PayOrderCreateReqDTO convert(TradeOrderDO order, List<TradeOrderItemDO> orderItems,
                                          TradePriceCalculateRespBO calculateRespBO, TradeOrderProperties orderProperties) {
@@ -97,24 +108,12 @@ public interface TradeOrderConvert {
         // 商户相关字段
         createReqDTO.setMerchantOrderId(String.valueOf(order.getId()));
         String subject = calculateRespBO.getItems().get(0).getSpuName();
-        if (calculateRespBO.getItems().size() > 1) {
-            subject += " 等多件";
-        }
+        subject = StrUtils.maxLength(subject, PayOrderCreateReqDTO.SUBJECT_MAX_LENGTH); // 避免超过 32 位
         createReqDTO.setSubject(subject);
         createReqDTO.setBody(subject); // TODO 芋艿：临时写死
         // 订单相关字段
         createReqDTO.setPrice(order.getPayPrice()).setExpireTime(addTime(orderProperties.getExpireTime()));
         return createReqDTO;
-    }
-
-    default Set<Long> convertPropertyValueIds(List<TradeOrderItemDO> list) {
-        if (CollUtil.isEmpty(list)) {
-            return new HashSet<>();
-        }
-        return list.stream().filter(item -> item.getProperties() != null)
-                .flatMap(p -> p.getProperties().stream()) // 遍历多个 Property 属性
-                .map(TradeOrderItemDO.Property::getValueId) // 将每个 Property 转换成对应的 propertyId，最后形成集合
-                .collect(Collectors.toSet());
     }
 
     // TODO 芋艿：可简化
@@ -146,6 +145,15 @@ public interface TradeOrderConvert {
         orderVO.setReceiverAreaName(AreaUtils.format(order.getReceiverAreaId()));
         // 处理用户信息
         orderVO.setUser(convert(user));
+        // TODO puhui999：模拟订单操作日志
+        ArrayList<TradeOrderDetailRespVO.OrderLog> orderLogs = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            TradeOrderDetailRespVO.OrderLog orderLog = new TradeOrderDetailRespVO.OrderLog();
+            orderLog.setContent("订单操作" + i);
+            orderLog.setCreateTime(LocalDateTime.now());
+            orderLogs.add(orderLog);
+        }
+        orderVO.setOrderLog(orderLogs);
         return orderVO;
     }
 
@@ -170,30 +178,12 @@ public interface TradeOrderConvert {
 
     // TODO 芋艿：可简化
     default AppTradeOrderDetailRespVO convert02(TradeOrderDO order, List<TradeOrderItemDO> orderItems,
-                                                List<ProductPropertyValueDetailRespDTO> propertyValueDetails, TradeOrderProperties tradeOrderProperties,
+                                                TradeOrderProperties tradeOrderProperties,
                                                 DeliveryExpressDO express) {
         AppTradeOrderDetailRespVO orderVO = convert3(order, orderItems);
         orderVO.setPayExpireTime(addTime(tradeOrderProperties.getExpireTime()));
         if (StrUtil.isNotEmpty(order.getPayChannelCode())) {
             orderVO.setPayChannelName(DictFrameworkUtils.getDictDataLabel(DictTypeConstants.CHANNEL_CODE, order.getPayChannelCode()));
-        }
-        // 处理商品属性
-        Map<Long, ProductPropertyValueDetailRespDTO> propertyValueDetailMap = convertMap(propertyValueDetails, ProductPropertyValueDetailRespDTO::getValueId);
-        for (int i = 0; i < orderItems.size(); i++) {
-            List<TradeOrderItemDO.Property> properties = orderItems.get(i).getProperties();
-            if (CollUtil.isEmpty(properties)) {
-                continue;
-            }
-            AppTradeOrderItemRespVO item = orderVO.getItems().get(i);
-            item.setProperties(new ArrayList<>(properties.size()));
-            // 遍历每个 properties，设置到 TradeOrderPageItemRespVO.Item 中
-            properties.forEach(property -> {
-                ProductPropertyValueDetailRespDTO propertyValueDetail = propertyValueDetailMap.get(property.getValueId());
-                if (propertyValueDetail == null) {
-                    return;
-                }
-                item.getProperties().add(convert02(propertyValueDetail));
-            });
         }
         // 处理收货地址
         orderVO.setReceiverAreaName(AreaUtils.format(order.getReceiverAreaId()));
@@ -221,12 +211,12 @@ public interface TradeOrderConvert {
     ProductCommentCreateReqDTO convert04(AppTradeOrderItemCommentCreateReqVO createReqVO, TradeOrderItemDO tradeOrderItemDO);
 
     default TradePriceCalculateReqBO convert(Long userId, AppTradeOrderSettlementReqVO settlementReqVO,
-                                             List<TradeCartDO> cartList) {
+                                             List<CartDO> cartList) {
         TradePriceCalculateReqBO reqBO = new TradePriceCalculateReqBO();
         reqBO.setUserId(userId).setCouponId(settlementReqVO.getCouponId()).setAddressId(settlementReqVO.getAddressId())
                 .setItems(new ArrayList<>(settlementReqVO.getItems().size()));
         // 商品项的构建
-        Map<Long, TradeCartDO> cartMap = convertMap(cartList, TradeCartDO::getId);
+        Map<Long, CartDO> cartMap = convertMap(cartList, CartDO::getId);
         for (AppTradeOrderSettlementReqVO.Item item : settlementReqVO.getItems()) {
             // 情况一：skuId + count
             if (item.getSkuId() != null) {
@@ -235,7 +225,7 @@ public interface TradeOrderConvert {
                 continue;
             }
             // 情况二：cartId
-            TradeCartDO cart = cartMap.get(item.getCartId());
+            CartDO cart = cartMap.get(item.getCartId());
             if (cart == null) {
                 continue;
             }

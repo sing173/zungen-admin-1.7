@@ -25,7 +25,6 @@ import java.util.Map;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
-import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 @Tag(name = "管理后台 - 交易订单")
 @RestController
@@ -70,7 +69,7 @@ public class TradeOrderController {
         TradeOrderDO order = tradeOrderQueryService.getOrder(id);
         // 查询订单项
         List<TradeOrderItemDO> orderItems = tradeOrderQueryService.getOrderItemListByOrderId(id);
-
+        // orderLog
         // 拼接数据
         MemberUserRespDTO user = memberUserApi.getUser(order.getUserId());
         return success(TradeOrderConvert.INSTANCE.convert(order, orderItems, user));
@@ -82,11 +81,10 @@ public class TradeOrderController {
     @PreAuthorize("@ss.hasPermission('trade:order:query')")
     public CommonResult<List<?>> getOrderExpressTrackList(@RequestParam("id") Long id) {
         return success(TradeOrderConvert.INSTANCE.convertList02(
-                tradeOrderQueryService.getExpressTrackList(id, getLoginUserId())));
+                tradeOrderQueryService.getExpressTrackList(id)));
     }
 
-    // TODO @puhui999：put 请求哈
-    @PostMapping("/delivery")
+    @PutMapping("/delivery")
     @Operation(summary = "订单发货")
     @PreAuthorize("@ss.hasPermission('trade:order:update')")
     public CommonResult<Boolean> deliveryOrder(@RequestBody TradeOrderDeliveryReqVO deliveryReqVO) {
@@ -94,8 +92,7 @@ public class TradeOrderController {
         return success(true);
     }
 
-    // TODO @puhui999：put 请求哈，update-remark；
-    @PostMapping("/remark")
+    @PutMapping("/update-remark")
     @Operation(summary = "订单备注")
     @PreAuthorize("@ss.hasPermission('trade:order:update')")
     public CommonResult<Boolean> updateOrderRemark(@RequestBody TradeOrderRemarkReqVO reqVO) {
@@ -103,8 +100,7 @@ public class TradeOrderController {
         return success(true);
     }
 
-    // TODO @puhui999：put 请求哈，update-price；
-    @PostMapping("/adjust-price")
+    @PutMapping("/update-price")
     @Operation(summary = "订单调价")
     @PreAuthorize("@ss.hasPermission('trade:order:update')")
     public CommonResult<Boolean> updateOrderPrice(@RequestBody TradeOrderUpdatePriceReqVO reqVO) {
@@ -112,20 +108,12 @@ public class TradeOrderController {
         return success(true);
     }
 
-    // TODO @puhui999：put 请求哈，update-address；
-    @PostMapping("/adjust-address")
+    @PutMapping("/update-address")
     @Operation(summary = "修改订单收货地址")
     @PreAuthorize("@ss.hasPermission('trade:order:update')")
     public CommonResult<Boolean> updateOrderAddress(@RequestBody TradeOrderUpdateAddressReqVO reqVO) {
         tradeOrderUpdateService.updateOrderAddress(reqVO);
         return success(true);
     }
-
-    // TODO @puhui999 订单物流详情
-    // TODO @puhui999 【前台】订单取消
-    // TODO @puhui999 【后台】订单取消
-    // TODO @puhui999 【前台】订单核销
-    // TODO @puhui999 【前台】订单删除
-    // TODO @puhui999 【后台】订单统计
 
 }

@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.promotion.controller.app.combination;
 
+import cn.hutool.core.date.DateUtil;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.date.DateUtils;
 import cn.iocoder.yudao.module.promotion.controller.app.combination.vo.record.AppCombinationRecordDetailRespVO;
@@ -58,7 +59,7 @@ public class AppCombinationRecordController {
             record.setId((long) i);
             record.setNickname("用户" + i);
             record.setAvatar("头像" + i);
-            record.setExpireTime(new Date());
+            record.setExpireTime(DateUtil.toLocalDateTime(new Date()));
             record.setUserSize(10);
             record.setUserCount(i);
             record.setPicUrl("https://static.iocoder.cn/mall/a79f5d2ea6bf0c3c11b2127332dfe2df.jpg");
@@ -79,7 +80,7 @@ public class AppCombinationRecordController {
         headRecord.setId(1L);
         headRecord.setNickname("用户" + 1);
         headRecord.setAvatar("头像" + 1);
-        headRecord.setExpireTime(DateUtils.addTime(Duration.ofDays(1)));
+        headRecord.setExpireTime(DateUtil.toLocalDateTime(DateUtils.addTime(Duration.ofDays(1))));
         headRecord.setUserSize(10);
         headRecord.setUserCount(3);
         headRecord.setStatus(1);
@@ -94,7 +95,7 @@ public class AppCombinationRecordController {
             record.setId((long) i);
             record.setNickname("用户" + i);
             record.setAvatar("头像" + i);
-            record.setExpireTime(new Date());
+            record.setExpireTime(DateUtil.toLocalDateTime(new Date()));
             record.setUserSize(10);
             record.setUserCount(i);
             record.setStatus(1);

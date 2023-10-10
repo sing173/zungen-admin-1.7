@@ -21,6 +21,14 @@ public class BpmTaskRespVO extends BpmTaskDonePageItemRespVO {
      */
     private User assigneeUser;
 
+    /**
+     * 父任务ID
+     */
+    private String parentTaskId;
+
+    @Schema(description = "子任务（由加签生成）", requiredMode = Schema.RequiredMode.REQUIRED, example = "childrenTask")
+    private List<BpmTaskRespVO> children;
+
     @Schema(description = "用户信息")
     @Data
     public static class User {

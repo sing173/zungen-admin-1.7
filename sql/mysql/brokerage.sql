@@ -1,4 +1,5 @@
 -- 增加配置表
+DROP TABLE IF EXISTS `trade_config`;
 create table trade_config
 (
     id                           bigint auto_increment comment '自增主键' primary key,
@@ -21,6 +22,7 @@ create table trade_config
 ) comment '交易中心配置';
 
 -- 增加分销用户扩展表
+DROP TABLE IF EXISTS `trade_brokerage_user`;
 create table trade_brokerage_user
 (
     id                bigint auto_increment comment '用户编号' primary key,
@@ -41,7 +43,7 @@ create table trade_brokerage_user
 create index idx_invite_user_id on trade_brokerage_user (bind_user_id) comment '推广员编号';
 create index idx_agent on trade_brokerage_user (brokerage_enabled) comment '是否成为推广员';
 
-
+DROP TABLE IF EXISTS `trade_brokerage_record`;
 create table trade_brokerage_record
 (
     id            int auto_increment comment '编号'
@@ -69,7 +71,7 @@ create index idx_user_id on trade_brokerage_record (user_id) comment '用户编�
 create index idx_biz on trade_brokerage_record (biz_type, biz_id) comment '业务';
 create index idx_status on trade_brokerage_record (status) comment '状态';
 
-
+DROP TABLE IF EXISTS `trade_brokerage_withdraw`;
 create table trade_brokerage_withdraw
 (
     id                  int auto_increment comment '编号'

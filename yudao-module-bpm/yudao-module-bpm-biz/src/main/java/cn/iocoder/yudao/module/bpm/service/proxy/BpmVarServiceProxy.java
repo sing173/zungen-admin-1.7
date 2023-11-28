@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.bpm.service.proxy;
 
 import cn.hutool.extra.spring.SpringUtil;
 import cn.iocoder.yudao.module.bpm.enums.ErrorCodeConstants;
+import cn.iocoder.yudao.module.bpm.service.crm.BpmCrmCreditService;
 import cn.iocoder.yudao.module.bpm.service.crm.BpmCrmInputService;
 
 import java.util.Map;
@@ -14,6 +15,7 @@ import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionU
 public class BpmVarServiceProxy implements BpmVarService{
     public static final String TABLE_CRM_CUSTOMER = "crm_customer";
     public static final String TABLE_CRM_INPUT = "bpm_crm_input";
+    public static final String TABLE_CRM_CUSTOMER_CREDIT = "crm_customer_credit";
 
     /**
      * 委托类，获取表单数据
@@ -49,6 +51,10 @@ public class BpmVarServiceProxy implements BpmVarService{
                 return new BpmVarServiceProxy(
                         SpringUtil.getBean(BpmCrmInputService.class),
                         "com.zungen.proto.entity.CrmInputFormEntity$Input");
+            case TABLE_CRM_CUSTOMER_CREDIT:
+                return new BpmVarServiceProxy(
+                        SpringUtil.getBean(BpmCrmCreditService.class),
+                        "com.zungen.proto.entity.AoyunDataSource$LoanOrder");
             default:
                 throw exception(ErrorCodeConstants.BPM_ZDE_DS_API_NOT_EXISTS);
 

@@ -25,7 +25,38 @@ public class CrmCustomerBaseVO {
     @Mobile
     private String mobile;
 
-    @Schema(description = "身份编号")
-    private String idCard;
+    @Schema(description = "家庭地址")
+    private String address;
+
+    @Schema(description = "工作单位")
+    private String myWork;
+
+    @Schema(description = "工作电话")
+    private String workPhone;
+
+    @Schema(description = "家庭地址")
+    private String workAddress;
+
+    @Schema(description = "邮箱地址")
+    private String email;
+
+    @Schema(description = "年龄")
+    private Integer age;
+
+    @Schema(description = "证件类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "1 身份证")
+    @NotNull(message = "证件类型不能为空")
+    private Byte cerType;
+
+    @Schema(description = "教育程度", example = "1 小学")
+    private Byte eduType;
+
+    @Schema(description = "职业类型", example = "7 军人")
+    private Byte professionType;
+
+    @Schema(description = "性别")
+    private Byte sex;
+
+    @Schema(description = "民族")
+    private Byte ethnic;
 
 }

@@ -1,9 +1,16 @@
 package cn.iocoder.yudao.module.crm.service.customer;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.iocoder.yudao.framework.common.util.date.LocalDateTimeUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import cn.iocoder.yudao.module.crm.controller.admin.customer.vo.*;
 import cn.iocoder.yudao.module.crm.dal.dataobject.customer.CrmCustomerDO;
@@ -31,6 +38,9 @@ public class CrmCustomerServiceImpl implements CrmCustomerService {
     public Long createCustomer(CrmCustomerCreateReqVO createReqVO) {
         // 插入
         CrmCustomerDO customer = CrmCustomerConvert.INSTANCE.convert(createReqVO);
+        //根据出生日期计算年龄
+        long age = customer.getBirthDay().until(LocalDate.now(), ChronoUnit.YEARS);
+        customer.setAge(NumberUtil.parseInt(String.valueOf(age)));
         customerMapper.insert(customer);
         // 返回
         return customer.getId();

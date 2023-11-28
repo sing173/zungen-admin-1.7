@@ -3,9 +3,12 @@ package cn.iocoder.yudao.module.bpm.service.crm;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.date.DateUtils;
+import cn.iocoder.yudao.module.bpm.api.feign.ApiFoxMockFeignClient;
 import cn.iocoder.yudao.module.bpm.api.task.dto.BpmProcessInstanceCreateReqDTO;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputCreateReqVO;
 import cn.iocoder.yudao.module.bpm.controller.admin.crm.vo.BpmCrmInputExportReqVO;
@@ -16,6 +19,7 @@ import cn.iocoder.yudao.module.bpm.dal.dataobject.crm.BpmCrmInputDO;
 import cn.iocoder.yudao.module.bpm.dal.mysql.crm.BpmCrmInputMapper;
 import cn.iocoder.yudao.module.bpm.service.task.BpmProcessInstanceService;
 import cn.iocoder.yudao.module.crm.api.CrmCustomerApi;
+import cn.iocoder.yudao.module.crm.api.dto.CrmCustomerCreditDTO;
 import cn.iocoder.yudao.module.crm.api.dto.CrmCustomerDTO;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +62,8 @@ public class BpmCrmInputServiceImpl implements BpmCrmInputService {
 
     @Resource
     private TaskService taskService;
+    @Resource
+    private ApiFoxMockFeignClient mockFeignClient;
 
     @Resource
     private RuntimeService runtimeService;
@@ -70,6 +77,10 @@ public class BpmCrmInputServiceImpl implements BpmCrmInputService {
         if(!crmCustomerApi.validateCustomerExists(createReqVO.getCrmCustomerId())) {
             throw exception(CUSTOMER_NOT_EXISTS);
         }
+        //创建客户征信信息（空）
+        CrmCustomerCreditDTO crmCustomerCreditDTO = new CrmCustomerCreditDTO();
+        crmCustomerCreditDTO.setCustomerId(createReqVO.getCrmCustomerId());
+        Long credit = crmCustomerApi.createCustomerCredit(crmCustomerCreditDTO);
 
         //创建进件工单
         BpmCrmInputDO crmInput = BpmCrmInputConvert.INSTANCE.convert(createReqVO);
@@ -84,6 +95,8 @@ public class BpmCrmInputServiceImpl implements BpmCrmInputService {
         //写入审批类型作为流程变量，流程根据此变量进入不同的分支
         processInstanceVariables.put("auditType", createReqVO.getAuditType());
         processInstanceVariables.put("customerId", createReqVO.getCrmCustomerId());
+        //客户征信id需跟流程走，所以给个默认值，避免获取为null时报错，后续步骤会动态设置值
+        processInstanceVariables.put("customerCreditId", credit);
         processInstanceVariables.put("customerImageId", createReqVO.getCrmCustomerImageId());
         processInstanceVariables.put("crmInputId", crmInput.getId());
 
@@ -133,7 +146,12 @@ public class BpmCrmInputServiceImpl implements BpmCrmInputService {
         switch (dataTable) {
             case "crm_customer":
                 CrmCustomerDTO customerDTO = crmCustomerApi.getCustomer(dataId);
-                return BeanUtil.beanToMap(customerDTO);
+                Map<String, Object> bpmVars =  BeanUtil.beanToMap(customerDTO);
+                if(bpmVars.get("birthDay") != null) {
+                    LocalDate birthDay = (LocalDate) bpmVars.get("birthDay");
+                    bpmVars.put("birthDay", birthDay.toString());
+                }
+                return bpmVars;
             case "bpm_crm_input":
                 BpmCrmInputDO crmInputDO = getCrmInput(dataId);
                 if(crmInputDO == null) {
@@ -141,7 +159,13 @@ public class BpmCrmInputServiceImpl implements BpmCrmInputService {
                 }
 
                 return BeanUtil.beanToMap(crmInputDO);
-
+            case "crm_customer_credit":
+                //先找到客户信息
+//                CrmCustomerDTO customer = crmCustomerApi.getCustomer(dataId);
+                //再根据客户id找到客户征信信息
+//                CrmCustomerCreditDTO crmCustomerCreditDTO = crmCustomerApi.getCustomerCredit(customer.getId().intValue());
+                //TODO 暂时通过mock.js接口返回模拟征信数据
+                return mockFeignClient.getCustomerCredit().getData();
             default:
                 throw new IllegalStateException("Unexpected value: " + dataTable);
         }
@@ -166,6 +190,13 @@ public class BpmCrmInputServiceImpl implements BpmCrmInputService {
                 BpmCrmInputDO crmInputDO = crmInputMapper.selectById(varUpdateVO.getDataId());
                 crmInputDO.setAuditRemark(StrUtil.toString(varUpdateVO.getData().get("auditRemark")));
                 crmInputMapper.updateById(crmInputDO);
+
+                return true;
+            case "Activity_credit"://进件工单-征信审批任务
+                CrmCustomerCreditDTO crmCustomerCreditDTO = crmCustomerApi.getCustomerCredit(varUpdateVO.getDataId());
+                Assert.notNull(crmCustomerCreditDTO, "客户征信信息不存在(任务id{})", varUpdateVO.getDataId());
+                BeanUtil.fillBeanWithMap(varUpdateVO.getData(), crmCustomerCreditDTO, false);
+                crmCustomerApi.updateCustomerCredit(crmCustomerCreditDTO);
 
                 return true;
             default:

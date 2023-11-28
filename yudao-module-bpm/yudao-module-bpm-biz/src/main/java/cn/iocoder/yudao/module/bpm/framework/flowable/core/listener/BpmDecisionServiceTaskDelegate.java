@@ -75,7 +75,7 @@ public class BpmDecisionServiceTaskDelegate implements JavaDelegate {
         JsonMessage<Map<String, Object>> message = new JsonMessage<>(header, dataSourceVarMap);
         //通过feign客户端发送http请求到决策前置服务，同步获取决策结果
         JsonMessage<EventOutData> eventOutMessage = zdeFeignClient.decision(JSON.toJSONString(message));
-        log.info("BpmDecisionServiceTaskActivityBehavior out:" + eventOutMessage.toString());
+        log.info("BpmDecisionServiceTaskDelegate out:" + eventOutMessage.toString());
         //把决策结果设置到流程变量中
         EventOutData eventOutData = eventOutMessage.getBody();
         StartFormData formData = formService.getStartFormData(execution.getProcessDefinitionId());

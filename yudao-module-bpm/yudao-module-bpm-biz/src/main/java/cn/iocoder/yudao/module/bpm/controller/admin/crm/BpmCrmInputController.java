@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.bpm.controller.admin.crm;
 
+import cn.hutool.core.date.DateUtil;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
@@ -19,10 +20,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY;
 import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.EXPORT;
 import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
@@ -76,7 +80,8 @@ public class BpmCrmInputController {
     @Operation(summary = "展示进件工单活动详情")
     @PreAuthorize("@ss.hasPermission('bpm:crm-input:update')")
     public CommonResult<Map<String, Object>> getBpmVars(@RequestParam("dataTable") String dataTable, @RequestParam("dataId") Long dataId) {
-        return success(crmInputService.getBpmVars(dataTable, dataId));
+        Map<String, Object> bpmVars = crmInputService.getBpmVars(dataTable, dataId);
+        return success(bpmVars);
     }
 
     @PostMapping("/update")

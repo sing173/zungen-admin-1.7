@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.bpm.framework.web.config;
 
 import cn.iocoder.yudao.framework.swagger.config.YudaoSwaggerAutoConfiguration;
+import cn.iocoder.yudao.module.bpm.api.feign.ApiFoxMockFeignClient;
 import cn.iocoder.yudao.module.bpm.api.feign.ZDEFeignClient;
 import feign.Feign;
 import feign.jackson.JacksonDecoder;
@@ -80,5 +81,13 @@ public class BpmWebConfiguration {
                 .encoder(new JacksonEncoder())
                 .decoder(new JacksonDecoder())
                 .target(ZDEFeignClient.class, "http://192.168.1.172:8889");
+    }
+
+    @Bean
+    public ApiFoxMockFeignClient apiFoxMockFeignClient() {
+        return Feign.builder()
+                .encoder(new JacksonEncoder())
+                .decoder(new JacksonDecoder())
+                .target(ApiFoxMockFeignClient.class, "http://192.168.1.130:4523");
     }
 }

@@ -1,5 +1,8 @@
 package com.zungen.mqtt.mq;
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import cn.iocoder.yudao.framework.common.util.collection.MapUtils;
 import cn.iocoder.yudao.framework.mq.core.stream.AbstractStreamMessageListener;
 import cn.iocoder.yudao.module.bpm.mq.message.BpmTaskMqttMessage;
@@ -36,10 +39,15 @@ public class BpmMqttSendConsumer extends AbstractStreamMessageListener<BpmTaskMq
         String content = notifyTemplateApi.formatNotifyTemplateContent(message.getTemplateCode(), MapUtils.convertMap(message.getTemplateParams()));
         String topic = message.getTopic();
 
+        JSONObject jsonObject =JSONUtil.createObj()
+                .append("message", content)
+                .append("orderId", message.getId())
+                .append("orderType", message.getTemplateParams().get(2).getValue());
+
         message.getUserIds().forEach(userId -> {
 
             protocolProcess.publish().sendPublishMessage(topic + userId,
-                    MqttQoS.AT_LEAST_ONCE, content.getBytes(StandardCharsets.UTF_8),
+                    MqttQoS.AT_LEAST_ONCE, jsonObject.toString().getBytes(StandardCharsets.UTF_8),
                     false, false);
         });
 

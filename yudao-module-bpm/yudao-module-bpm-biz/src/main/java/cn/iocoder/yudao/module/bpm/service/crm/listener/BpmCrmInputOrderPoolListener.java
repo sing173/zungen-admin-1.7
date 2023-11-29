@@ -80,7 +80,8 @@ public class BpmCrmInputOrderPoolListener implements ExecutionListener {
         bpmTaskNotifyMessage.setUserIds(userIdList);
         bpmTaskNotifyMessage.setTemplateParams(CollUtil.newArrayList(
                 new KeyValue<>("orderName", "进件工单"),
-                new KeyValue<>("orderNo", crmInputDO.getOrderNo())));
+                new KeyValue<>("orderNo", crmInputDO.getOrderNo()),
+                new KeyValue<>("orderType", BPM_ORDER_CRM_INPUT_KEY)));
         redisMQTemplate.send(bpmTaskNotifyMessage);
         //2.1 发送MQTT主题消息提示各终端抢单
         BpmTaskMqttMessage bpmTaskMqttMessage = BpmTaskMessageConvert.INSTANCE.convert(bpmTaskNotifyMessage);

@@ -120,6 +120,10 @@ public class BpmCrmInputServiceImpl implements BpmCrmInputService {
                 .setStatus(result.byteValue()));
     }
 
+    public void updateCrmInput(BpmCrmInputDO crmInputDO) {
+        crmInputMapper.updateById(crmInputDO);
+    }
+
     private void validateCrmInputExists(Long id) {
         if (crmInputMapper.selectById(id) == null) {
             throw exception(CRM_INPUT_NOT_EXISTS);

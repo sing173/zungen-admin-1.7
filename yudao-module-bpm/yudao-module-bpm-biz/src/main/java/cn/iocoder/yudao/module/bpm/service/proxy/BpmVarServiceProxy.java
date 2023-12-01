@@ -46,11 +46,6 @@ public class BpmVarServiceProxy implements BpmVarService{
                 return new BpmVarServiceProxy(
                         SpringUtil.getBean(BpmCrmInputService.class),
                         "com.zungen.proto.entity.CrmInputFormEntity$Customer");
-            case TABLE_CRM_INPUT:
-                //TODO 暂未构建$Input 的proto文件
-                return new BpmVarServiceProxy(
-                        SpringUtil.getBean(BpmCrmInputService.class),
-                        "com.zungen.proto.entity.CrmInputFormEntity$Input");
             case TABLE_CRM_CUSTOMER_CREDIT:
                 return new BpmVarServiceProxy(
                         SpringUtil.getBean(BpmCrmCreditService.class),

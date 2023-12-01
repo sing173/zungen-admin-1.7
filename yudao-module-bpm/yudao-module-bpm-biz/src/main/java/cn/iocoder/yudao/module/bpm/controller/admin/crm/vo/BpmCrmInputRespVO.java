@@ -40,4 +40,9 @@ public class BpmCrmInputRespVO extends BpmCrmInputBaseVO {
     @Schema(description = "审批意见", example = "随便")
     private String auditRemark;
 
+    @Schema(description = "决策结果-决绝码")
+    private String rejectCode;
+
+    @Schema(description = "决策结果-申请评分")
+    private Float applyScore;
 }

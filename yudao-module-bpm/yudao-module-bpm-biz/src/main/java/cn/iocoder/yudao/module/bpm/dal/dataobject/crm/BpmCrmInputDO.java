@@ -68,4 +68,13 @@ public class BpmCrmInputDO extends BaseDO {
      */
     private Long auditorId;
 
+    /**
+     * 决策结果-决绝码
+     */
+    private String rejectCode;
+
+    /**
+     * 决策结果-申请评分
+     */
+    private Float applyScore;
 }

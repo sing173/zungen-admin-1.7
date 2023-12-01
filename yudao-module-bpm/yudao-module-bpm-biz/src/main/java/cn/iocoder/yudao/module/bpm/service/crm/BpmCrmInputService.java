@@ -34,6 +34,7 @@ public interface BpmCrmInputService extends BpmVarService {
      */
     void updateCrmInputStatus(Long id, Integer result);
 
+    void updateCrmInput(BpmCrmInputDO crmInputDO);
 
     /**
      * 获得进件工单

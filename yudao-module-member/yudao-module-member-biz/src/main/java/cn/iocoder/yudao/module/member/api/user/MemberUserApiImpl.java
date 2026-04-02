@@ -44,4 +44,10 @@ public class MemberUserApiImpl implements MemberUserApi {
         return MemberUserConvert.INSTANCE.convert2(userService.getUserByMobile(mobile));
     }
 
+    @Override
+    public MemberUserRespDTO getByOpenId(String openid) {
+        MemberUserDO user = userService.getByOpenId(openid);
+        return MemberUserConvert.INSTANCE.convert2(user);
+    }
+
 }

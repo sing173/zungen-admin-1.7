@@ -136,4 +136,11 @@ public class MemberUserDO extends TenantBaseDO {
      */
     private Long groupId;
 
+    // ========== 微信相关 ==========
+
+    /**
+     * 微信公众号 OpenID
+     */
+    private String openid;
+
 }

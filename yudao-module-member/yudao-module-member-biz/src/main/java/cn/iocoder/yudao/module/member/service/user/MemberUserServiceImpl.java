@@ -62,6 +62,11 @@ public class MemberUserServiceImpl implements MemberUserService {
     }
 
     @Override
+    public MemberUserDO getByOpenId(String openid) {
+        return memberUserMapper.selectByOpenId(openid);
+    }
+
+    @Override
     public List<MemberUserDO> getUserListByNickname(String nickname) {
         return memberUserMapper.selectListByNicknameLike(nickname);
     }

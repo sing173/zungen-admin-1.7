@@ -56,4 +56,12 @@ public interface MemberUserApi {
      * @return 用户信息
      */
     MemberUserRespDTO getUserByMobile(String mobile);
+
+    /**
+     * 通过微信 OpenID 查询用户
+     *
+     * @param openid 微信公众号 OpenID
+     * @return 用户信息（可能为空）
+     */
+    MemberUserRespDTO getByOpenId(String openid);
 }

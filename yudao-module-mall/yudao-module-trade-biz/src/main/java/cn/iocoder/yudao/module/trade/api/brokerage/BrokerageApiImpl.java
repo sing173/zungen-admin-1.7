@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.trade.api.brokerage;
 
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.module.trade.api.brokerage.dto.BrokerageUserDTO;
 import cn.iocoder.yudao.module.trade.convert.brokerage.user.BrokerageUserConvert;
 import cn.iocoder.yudao.module.trade.service.brokerage.user.BrokerageUserService;
@@ -28,6 +29,12 @@ public class BrokerageApiImpl implements BrokerageApi {
     @Override
     public boolean bindUser(Long userId, Long bindUserId, Boolean isNewUser) {
         return brokerageUserService.bindBrokerageUser(userId, bindUserId, isNewUser);
+    }
+
+    @Override
+    public CommonResult<Boolean> bindByScan(Long distributorId, Long userId, Long sceneId) {
+        boolean success = brokerageUserService.bindByScan(distributorId, userId, sceneId);
+        return CommonResult.success(success);
     }
 
 }

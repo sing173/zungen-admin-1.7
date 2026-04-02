@@ -2,7 +2,9 @@ package cn.iocoder.yudao.module.trade.service.brokerage.user;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.BooleanUtil;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.trade.api.brokerage.BrokerageApi;
 import cn.iocoder.yudao.module.trade.controller.admin.brokerage.user.vo.BrokerageUserPageReqVO;
 import cn.iocoder.yudao.module.trade.dal.dataobject.brokerage.user.BrokerageUserDO;
 import cn.iocoder.yudao.module.trade.dal.dataobject.config.TradeConfigDO;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
+import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -218,5 +221,43 @@ public class BrokerageUserServiceImpl implements BrokerageUserService {
         }
         return true;
     }
+
+    @Override
+    public CommonResult<Boolean> bindByScan(Long distributorId, Long userId, @Nullable Long sceneId) {
+        // 1. 参数校验
+        if (distributorId == null || userId == null) {
+            return CommonResult.error("分销员ID和用户ID不能为空");
+        }
+
+        // 2. 校验分销员是否存在且有分销资格
+        BrokerageUserDO distributor = brokerageUserMapper.selectById(distributorId);
+        if (distributor == null) {
+            return CommonResult.error("分销员不存在");
+        }
+        if (BooleanUtil.isFalse(distributor.getBrokerageEnabled())) {
+            return CommonResult.error("分销员未开通推广资格");
+        }
+
+        // 3. 调用绑定逻辑（扫码场景视为非新用户，因为用户已存在）
+        // 注意：bindUser 方法内部会处理新/老分销用户的创建逻辑
+        boolean success = bindBrokerageUser(userId, distributorId, false);
+        if (!success) {
+            return CommonResult.error("绑定分销关系失败");
+        }
+
+        // 4. TODO：记录扫码日志（后续可补充BrokerageScanLogDO实体和Mapper）
+        // logScan(distributorId, userId, sceneId);
+
+        return CommonResult.success(true);
+    }
+
+    // TODO：后续可添加扫码日志记录方法
+    // private void logScan(Long distributorId, Long userId, Long sceneId) {
+    //     BrokerageScanLogDO log = new BrokerageScanLogDO()
+    //             .setDistributorId(distributorId)
+    //             .setUserId(userId)
+    //             .setSceneId(sceneId);
+    //     brokerageScanLogMapper.insert(log);
+    // }
 
 }

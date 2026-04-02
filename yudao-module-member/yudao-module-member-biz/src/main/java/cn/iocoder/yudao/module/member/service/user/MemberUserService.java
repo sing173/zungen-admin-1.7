@@ -64,6 +64,14 @@ public interface MemberUserService {
     MemberUserDO getUser(Long id);
 
     /**
+     * 通过微信 OpenID 查询用户
+     *
+     * @param openid 微信公众号 OpenID
+     * @return 用户对象信息
+     */
+    MemberUserDO getByOpenId(String openid);
+
+    /**
      * 通过用户 ID 查询用户们
      *
      * @param ids 用户 ID

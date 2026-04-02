@@ -11,8 +11,6 @@ import me.chanjar.weixin.mp.api.WxMpMessageHandler;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
-import org.apache.dubbo.common.constants.CommonConstants;
-import org.apache.dubbo.rpc.annotation.Reference;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -27,10 +25,10 @@ import java.util.Map;
 @Slf4j
 public class ScanHandler implements WxMpMessageHandler {
 
-    @Reference(protocol = CommonConstants.DUBBO_PROTOCOL, timeout = 30000, retries = 0, check = false)
+    @Resource
     private BrokerageApi brokerageApi;
 
-    @Reference(protocol = CommonConstants.DUBBO_PROTOCOL, timeout = 30000, retries = 0, check = false)
+    @Resource
     private MemberUserApi memberUserApi;
 
     @Override

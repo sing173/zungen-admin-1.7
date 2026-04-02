@@ -1,7 +1,8 @@
 package cn.iocoder.yudao.module.mp.service.handler.other;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.module.member.service.user.MemberUserService;
+import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
+import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import cn.iocoder.yudao.module.trade.api.brokerage.BrokerageApi;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -29,8 +30,8 @@ public class ScanHandler implements WxMpMessageHandler {
     @Reference(protocol = CommonConstants.DUBBO_PROTOCOL, timeout = 30000, retries = 0, check = false)
     private BrokerageApi brokerageApi;
 
-    @Resource
-    private MemberUserService memberUserService;
+    @Reference(protocol = CommonConstants.DUBBO_PROTOCOL, timeout = 30000, retries = 0, check = false)
+    private MemberUserApi memberUserApi;
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMpXmlMessage, Map<String, Object> context,
@@ -76,7 +77,7 @@ public class ScanHandler implements WxMpMessageHandler {
         log.info("解析分销扫码参数：distributorId={}, sceneId={}", distributorId, sceneId);
 
         // 2. 通过OpenID查询会员用户
-        MemberUserDO user = memberUserService.getByOpenId(openId);
+        MemberUserRespDTO user = memberUserApi.getByOpenId(openId);
         if (user == null) {
             log.info("扫码用户未注册会员，openId={}", openId);
             // TODO：此时应引导用户注册/授权，绑定openId
